@@ -1,0 +1,2850 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Lakshay Computer Care | Doorstep Laptop, MacBook & Computer Repair East Delhi</title>
+  <meta name="description" content="Expert doorstep computer, laptop, MacBook repair, 4K CCTV installation and data recovery across East Delhi. 45-60 min arrival, no fix no fee, 90-day warranty."/>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg"/>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN with configuration -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-base": "#0B0F17",
+            "surface-subtle": "#111827",
+            "surface-card": "#182234",
+            "surface-elevated": "#202E44",
+            "primary": "#2563EB",
+            "primary-hover": "#1D4ED8",
+            "primary-light": "#60A5FA",
+            "accent": "#06B6D4",
+            "status-healthy": "#10B981",
+            "status-warning": "#F59E0B",
+            "on-surface": "#F3F4F6",
+            "on-surface-variant": "#9CA3AF",
+            "outline": "#374151",
+            "outline-subtle": "#1F2937",
+          },
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"],
+          }
+        }
+      }
+    };
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- MODAL ELEMENTS ---
+      const modal = document.getElementById('booking-modal');
+      const closeModalBtn = document.getElementById('close-modal-btn');
+      const openModalTriggers = document.querySelectorAll('.open-modal-trigger');
+      
+      const modalFormView = document.getElementById('modal-form-view');
+      const modalSuccessView = document.getElementById('modal-success-view');
+      
+      const enquiryForm = document.getElementById('simple-enquiry-form');
+      const enquiryName = document.getElementById('enquiry-name');
+      const enquiryPhone = document.getElementById('enquiry-phone');
+      const enquiryArea = document.getElementById('enquiry-area');
+      const enquiryAddress = document.getElementById('enquiry-address');
+      const enquiryReason = document.getElementById('enquiry-reason');
+      const enquiryDescription = document.getElementById('enquiry-description');
+      const areaChips = document.querySelectorAll('.area-chip');
+      
+      const modalSelectedServicePill = document.getElementById('modal-selected-service-pill');
+      const modalSelectedServiceText = document.getElementById('modal-selected-service-text');
+      const clearSelectedServiceBtn = document.getElementById('clear-selected-service-btn');
+      const whatsappQuickBtn = document.getElementById('whatsapp-quick-submit-btn');
+
+      // --- OPEN / CLOSE MODAL ---
+      function openModal(prefill = null) {
+        if (prefill) {
+          if (modalSelectedServicePill && modalSelectedServiceText) {
+            modalSelectedServiceText.textContent = `Inquiry for: ${prefill.title || 'Service'}`;
+            modalSelectedServicePill.classList.remove('hidden');
+          }
+          if (prefill.reason && enquiryReason) {
+            enquiryReason.value = prefill.reason;
+          }
+          if (prefill.desc && enquiryDescription) {
+            enquiryDescription.value = prefill.desc;
+          }
+        }
+        modalFormView.classList.remove('hidden');
+        modalSuccessView.classList.add('hidden');
+        modal.classList.remove('hidden-modal');
+        document.body.style.overflow = 'hidden';
+        if (enquiryName) enquiryName.focus();
+        updateWhatsAppLink();
+      }
+
+      function closeModal() {
+        modal.classList.add('hidden-modal');
+        document.body.style.overflow = '';
+      }
+
+      openModalTriggers.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const serviceTitle = btn.getAttribute('data-service-title');
+          const productTitle = btn.getAttribute('data-product-title');
+          if (serviceTitle) {
+            openModal({ title: serviceTitle, reason: serviceTitle });
+          } else if (productTitle) {
+            openModal({
+              title: productTitle,
+              reason: 'Second Hand Laptop Inquiry / Purchase',
+              desc: `I want to check availability / buy: ${productTitle}`
+            });
+          } else {
+            openModal();
+          }
+        });
+      });
+
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+      }
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden-modal')) {
+          closeModal();
+        }
+      });
+
+      if (clearSelectedServiceBtn) {
+        clearSelectedServiceBtn.addEventListener('click', () => {
+          modalSelectedServicePill.classList.add('hidden');
+        });
+      }
+
+      // --- AREA SUGGESTION CHIPS ---
+      areaChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          if (enquiryArea) {
+            enquiryArea.value = chip.textContent.trim();
+            enquiryArea.focus();
+          }
+          updateWhatsAppLink();
+        });
+      });
+
+      // --- WHATSAPP QUICK LINK BUILDER ---
+      function updateWhatsAppLink() {
+        if (!whatsappQuickBtn) return;
+        const name = enquiryName ? enquiryName.value.trim() : '';
+        const phone = enquiryPhone ? enquiryPhone.value.trim() : '';
+        const area = enquiryArea ? enquiryArea.value.trim() : '';
+        const address = enquiryAddress ? enquiryAddress.value.trim() : '';
+        const reason = enquiryReason ? enquiryReason.value : 'Laptop Repair';
+        const desc = enquiryDescription ? enquiryDescription.value.trim() : '';
+
+        let msg = `Hi Lakshay Computer Care, I need doorstep computer service:\n`;
+        if (name) msg += `- Name: ${name}\n`;
+        if (phone) msg += `- Phone: ${phone}\n`;
+        if (area) msg += `- Area: ${area}\n`;
+        if (address) msg += `- Address: ${address}\n`;
+        msg += `- Reason: ${reason}\n`;
+        if (desc) msg += `- Details: ${desc}\n`;
+
+        whatsappQuickBtn.href = `https://wa.me/919210721868?text=${encodeURIComponent(msg)}`;
+      }
+
+      [enquiryName, enquiryPhone, enquiryArea, enquiryAddress, enquiryReason, enquiryDescription].forEach(el => {
+        if (el) {
+          el.addEventListener('input', updateWhatsAppLink);
+          el.addEventListener('change', updateWhatsAppLink);
+        }
+      });
+
+      // --- FORM SUBMISSION & SUCCESS VIEW ---
+      if (enquiryForm) {
+        enquiryForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const ticketNo = '#LCC-' + Math.floor(1000 + Math.random() * 9000);
+          const name = enquiryName.value || 'Customer';
+          const phone = enquiryPhone.value || '9210721868';
+          const area = enquiryArea.value || 'Doorstep Delivery';
+          const address = enquiryAddress.value || area;
+          const reason = enquiryReason.value || 'Laptop Repair';
+          const desc = enquiryDescription.value || '';
+
+          // Save enquiry into localStorage for Admin Panel
+          try {
+            const ENQUIRIES_KEY = 'lcc_customer_enquiries';
+            const stored = JSON.parse(localStorage.getItem(ENQUIRIES_KEY) || '[]');
+            const newLead = {
+              id: ticketNo,
+              date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+              name: name,
+              phone: phone,
+              area: area,
+              address: address,
+              reason: reason,
+              description: desc,
+              status: 'New'
+            };
+            stored.unshift(newLead);
+            localStorage.setItem(ENQUIRIES_KEY, JSON.stringify(stored));
+          } catch(err) {
+            console.warn('Could not store enquiry:', err);
+          }
+
+          // Populate success view fields
+          const confirmedTicket = document.getElementById('confirmed-ticket');
+          const confirmedName = document.getElementById('confirmed-name');
+          const confirmedPhone = document.getElementById('confirmed-phone');
+          const confirmedAddress = document.getElementById('confirmed-address');
+          const confirmedReason = document.getElementById('confirmed-reason');
+          const confirmedWhatsappBtn = document.getElementById('confirmed-whatsapp-btn');
+
+          if (confirmedTicket) confirmedTicket.textContent = ticketNo;
+          if (confirmedName) confirmedName.textContent = name;
+          if (confirmedPhone) confirmedPhone.textContent = phone;
+          if (confirmedAddress) confirmedAddress.textContent = `${address}${area ? ' (' + area + ')' : ''}`;
+          if (confirmedReason) confirmedReason.textContent = reason;
+
+          if (confirmedWhatsappBtn) {
+            const waMsg = `Hi Lakshay Computer Care, I just booked doorstep dispatch ${ticketNo}.\nName: ${name}\nPhone: ${phone}\nArea: ${area}\nAddress: ${address}\nService: ${reason}${desc ? '\nNotes: ' + desc : ''}`;
+            confirmedWhatsappBtn.href = `https://wa.me/919210721868?text=${encodeURIComponent(waMsg)}`;
+          }
+
+          modalFormView.classList.add('hidden');
+          modalSuccessView.classList.remove('hidden');
+        });
+      }
+
+      const confirmedDoneBtn = document.getElementById('confirmed-done-btn');
+      if (confirmedDoneBtn) {
+        confirmedDoneBtn.addEventListener('click', closeModal);
+      }
+
+      // --- ESTIMATOR ACCORDION INTERACTION (Section 2) ---
+      const triageButtons = document.querySelectorAll('.triage-trigger');
+      const estTitle = document.getElementById('est-title');
+      const estDesc = document.getElementById('est-desc');
+      const estPrice = document.getElementById('est-price');
+      const estTime = document.getElementById('est-time');
+      const estIncludes = document.getElementById('est-includes');
+      const estWarranty = document.getElementById('est-warranty');
+      const estBookBtn = document.getElementById('est-book-btn');
+
+      triageButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          triageButtons.forEach(b => {
+            b.classList.remove('border-primary', 'bg-surface-elevated');
+            b.classList.add('border-outline-subtle', 'bg-surface-card');
+          });
+          this.classList.remove('border-outline-subtle', 'bg-surface-card');
+          this.classList.add('border-primary', 'bg-surface-elevated');
+
+          const title = this.getAttribute('data-title');
+          const desc = this.getAttribute('data-desc');
+          const price = this.getAttribute('data-price');
+          const time = this.getAttribute('data-time');
+          const includes = this.getAttribute('data-includes');
+          const warranty = this.getAttribute('data-warranty');
+
+          if (estTitle) estTitle.textContent = title;
+          if (estDesc) estDesc.textContent = desc;
+          if (estPrice) estPrice.textContent = price;
+          if (estTime) estTime.textContent = time;
+          if (estIncludes) estIncludes.textContent = includes;
+          if (estWarranty) estWarranty.textContent = warranty;
+        });
+      });
+
+      if (estBookBtn) {
+        estBookBtn.addEventListener('click', () => {
+          const title = estTitle ? estTitle.textContent : 'Laptop Diagnostics';
+          openModal({ title: title, reason: title });
+        });
+      }
+
+      // --- DYNAMIC PRODUCT CATALOGUE SYNC (From Admin Panel / LocalStorage) ---
+      const PRODUCTS_KEY = 'lcc_custom_products';
+      const productGrid = document.getElementById('product-grid');
+
+      function syncCustomProducts() {
+        const stored = localStorage.getItem(PRODUCTS_KEY);
+        if (!stored || !productGrid) return;
+        try {
+          const prods = JSON.parse(stored);
+          if (prods && prods.length > 0) {
+            productGrid.innerHTML = prods.map(item => {
+              let catClass = 'cat-business';
+              if (item.category && item.category.includes('Gaming')) catClass = 'cat-gaming';
+              else if (item.category && item.category.includes('Accessories')) catClass = 'cat-accessories';
+              else if (item.category && item.category.includes('Touch')) catClass = 'cat-touch';
+
+              let imgSrc = item.image_file ? `assets/products/${item.image_file}` : (item.url || 'assets/images/repair-lab.jpg');
+              if (item.image_file && (item.image_file.startsWith('http') || item.image_file.startsWith('data:'))) {
+                imgSrc = item.image_file;
+              }
+
+              return `
+                <div class="product-item ${catClass} p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+                  <div class="flex flex-col gap-3">
+                    <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                      <img alt="${item.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${imgSrc}" onerror="this.src='assets/logo.svg'"/>
+                      <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                        ${item.badge || item.category}
+                      </span>
+                      <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                        ${item.discount || 'Special Deal'}
+                      </span>
+                    </div>
+
+                    <div>
+                      <div class="flex items-center justify-between gap-2">
+                        <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                          <span class="material-symbols-outlined text-[13px]">verified</span> ${item.condition || 'Grade A+ Refurbished · 100% Tested'}
+                        </span>
+                        <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                          ${item.warranty || '6 Months Onsite Warranty'}
+                        </span>
+                      </div>
+                      <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                        ${item.name}
+                      </h3>
+                      <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                        ${item.specs}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+                    <div class="flex items-baseline justify-between">
+                      <div>
+                        <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                        <span class="font-headline font-extrabold text-xl sm:text-2xl text-white tracking-tight">${item.startingPrice}</span>
+                      </div>
+                      ${item.originalMrp ? `
+                      <div class="text-right">
+                        <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Original MRP</span>
+                        <span class="text-xs sm:text-sm text-on-surface-variant line-through font-mono">${item.originalMrp}</span>
+                      </div>` : ''}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                      <a href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care,%20I%20am%20interested%20in%20buying%20${encodeURIComponent(item.name)}%20for%20${encodeURIComponent(item.startingPrice)}" target="_blank" rel="noopener noreferrer" class="py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-600/20">
+                        <span class="material-symbols-outlined text-[16px]">chat</span>
+                        <span>Buy on WA</span>
+                      </a>
+                      <button type="button" class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle hover:border-primary/40 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer" data-product-title="${item.name}" data-product-price="${item.startingPrice}">
+                        <span class="material-symbols-outlined text-[16px] text-accent">visibility</span>
+                        <span>Book Demo</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+
+            // Re-bind modal triggers for newly created product cards
+            productGrid.querySelectorAll('.open-modal-trigger').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const pTitle = btn.getAttribute('data-product-title');
+                openModal({
+                  title: pTitle,
+                  reason: 'Second Hand Laptop Inquiry / Purchase',
+                  desc: `I want to check availability / buy: ${pTitle}`
+                });
+              });
+            });
+          }
+        } catch(e) {
+          console.warn('Error loading custom products:', e);
+        }
+      }
+
+      syncCustomProducts();
+
+      // --- PRODUCT CATEGORY FILTER LOGIC ---
+      const filterBtns = document.querySelectorAll('.product-filter-btn');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-primary', 'text-white');
+            b.classList.add('bg-surface-card', 'text-on-surface-variant', 'border', 'border-outline-subtle');
+          });
+          btn.classList.remove('bg-surface-card', 'text-on-surface-variant', 'border', 'border-outline-subtle');
+          btn.classList.add('bg-primary', 'text-white');
+
+          const filter = btn.getAttribute('data-filter');
+          const currentItems = document.querySelectorAll('.product-item');
+          currentItems.forEach(item => {
+            if (filter === 'all' || item.classList.contains(filter)) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; scroll-behavior: smooth; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0D14; }
+    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Modal Animation */
+    .modal-backdrop {
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .modal-backdrop.hidden-modal {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .modal-backdrop:not(.hidden-modal) {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .modal-panel {
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+    .modal-backdrop.hidden-modal .modal-panel {
+      transform: scale(0.95) translateY(12px);
+      opacity: 0;
+    }
+    .modal-backdrop:not(.hidden-modal) .modal-panel {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="bg-surface-base font-sans text-on-surface antialiased selection:bg-primary selection:text-white">
+
+  <!-- TOP ANNOUNCEMENT TELEMETRY BAR -->
+  <aside aria-label="Service status banner" class="bg-surface-subtle border-b border-outline-subtle/80 py-2 px-4 text-xs sm:text-sm text-on-surface-variant">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-status-healthy animate-pulse"></span>
+        <span class="text-on-surface font-medium">Technicians on duty across East Delhi</span>
+        <span class="text-outline hidden md:inline">|</span>
+        <span class="hidden md:inline text-on-surface-variant">45–60 Minute Guaranteed Doorstep Arrival</span>
+      </div>
+      <div class="flex items-center gap-3 sm:gap-4 text-xs font-mono">
+        <a class="flex items-center gap-1.5 text-primary-light hover:text-white transition-colors" href="tel:+919210721868">
+          <span class="material-symbols-outlined text-[15px]">call</span>
+          <span>+91 92107 21868</span>
+        </a>
+        <span class="text-outline">|</span>
+        <a class="flex items-center gap-1.5 text-status-healthy hover:text-white transition-colors" href="https://wa.me/919210721868" target="_blank" rel="noopener noreferrer">
+          <span class="material-symbols-outlined text-[15px]">chat</span>
+          <span>WhatsApp</span>
+        </a>
+        <span class="text-outline hidden sm:inline">|</span>
+        <a class="hidden sm:flex items-center gap-1.5 text-accent hover:text-white transition-colors" href="mailto:lakshaybatra90@gmail.com">
+          <span class="material-symbols-outlined text-[15px]">mail</span>
+          <span>lakshaybatra90@gmail.com</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 w-full z-40 bg-surface-base/90 backdrop-blur-md border-b border-outline-subtle/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <!-- Brand Logo (Screen 4 SVG Logo) -->
+      <a class="flex items-center gap-3 shrink-0 group" href="#" aria-label="Lakshay Computer Care Homepage">
+        <img alt="Lakshay Computer Care Logo" class="h-9 w-auto object-contain transition-transform group-hover:scale-105" src="assets/logo.svg"/>
+      </a>
+
+      <!-- Friendly Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-1 text-sm font-medium text-on-surface-variant" aria-label="Main Navigation">
+        <a class="px-3 py-2 rounded-lg hover:text-white hover:bg-surface-subtle transition-all" href="#pre-owned-laptops"><span class="text-accent font-semibold">★ Second Hand Laptops</span></a>
+        <a class="px-3 py-2 rounded-lg hover:text-white hover:bg-surface-subtle transition-all" href="#services">Services</a>
+        <a class="px-3 py-2 rounded-lg hover:text-white hover:bg-surface-subtle transition-all" href="#triage">Common Issues</a>
+        <a class="px-3 py-2 rounded-lg hover:text-white hover:bg-surface-subtle transition-all" href="#how-it-works">How It Works</a>
+        <a class="px-3 py-2 rounded-lg hover:text-white hover:bg-surface-subtle transition-all" href="#why-choose-us">Pricing &amp; Warranty</a>
+        <a class="px-3 py-2 rounded-lg hover:text-white hover:bg-surface-subtle transition-all" href="#service-areas">Service Areas</a>
+        <a class="px-3 py-2 rounded-lg hover:text-white hover:bg-surface-subtle transition-all" href="#reviews">Reviews</a>
+      </nav>
+
+      <!-- Action Buttons (Single direct call & WhatsApp, doorstep booking reserved for Hero & Services) -->
+      <div class="flex items-center gap-2.5">
+        <a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 shadow-md shadow-emerald-600/20 transition-all" href="https://wa.me/919210721868" target="_blank" rel="noopener noreferrer">
+          <span class="material-symbols-outlined text-[18px]">chat</span>
+          <span class="hidden sm:inline">WhatsApp</span>
+        </a>
+        <a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold text-white bg-surface-subtle hover:bg-surface-elevated border border-outline-subtle transition-all" href="tel:+919210721868">
+          <span class="material-symbols-outlined text-[18px] text-accent">call</span>
+          <span>9210721868</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="w-full">
+    <!-- SECTION 1: HERO SECTION -->
+    <section class="relative overflow-hidden pt-12 pb-20 lg:pt-16 lg:pb-28">
+      <!-- Soft ambient light glow -->
+      <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[720px] h-[450px] bg-gradient-to-b from-primary/15 via-accent/5 to-transparent rounded-full blur-[100px] pointer-events-none -z-10"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          <!-- Hero Left Column -->
+          <div class="lg:col-span-7 flex flex-col gap-6 text-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-outline-subtle text-xs sm:text-sm text-on-surface-variant w-fit">
+              <span class="w-2 h-2 rounded-full bg-status-healthy"></span>
+              <span class="text-on-surface font-medium">Doorstep Tech Service in East Delhi</span>
+            </div>
+
+            <h1 class="font-headline font-extrabold text-3xl sm:text-5xl lg:text-[54px] text-white tracking-tight leading-[1.15]">
+              Fast, Reliable Computer &amp; Laptop Repair <br class="hidden sm:inline"/>
+              <span class="bg-gradient-to-r from-primary-light via-blue-400 to-accent bg-clip-text text-transparent">At Your Doorstep.</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-on-surface-variant max-w-2xl leading-relaxed">
+              Expert doorstep repair for laptops, MacBooks, desktops, CCTV &amp; data recovery across East Delhi. Certified technicians, transparent pricing, and a solid 90-day warranty.
+            </p>
+
+            <!-- Friendly CTAs with WhatsApp, Call & Email Buttons -->
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <button class="open-modal-trigger inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl shadow-xl shadow-primary/20 hover:shadow-primary/35 transition-all text-sm sm:text-base cursor-pointer" type="button">
+                <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                <span>Book a Home Visit</span>
+              </button>
+              <a class="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition-all text-sm sm:text-base" href="https://wa.me/919210721868" target="_blank" rel="noopener noreferrer">
+                <span class="material-symbols-outlined text-[20px]">chat</span>
+                <span>WhatsApp Us</span>
+              </a>
+              <a class="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-surface-card hover:bg-surface-elevated text-on-surface hover:text-white border border-outline-subtle font-semibold rounded-xl transition-all text-sm sm:text-base" href="mailto:lakshaybatra90@gmail.com?subject=Laptop%20Repair%20Inquiry%20-%20East%20Delhi&body=Hi%20Lakshay%20Computer%20Care,%20I%20need%20assistance%20with:">
+                <span class="material-symbols-outlined text-accent text-[20px]">mail</span>
+                <span>Send Email</span>
+              </a>
+              <a class="inline-flex items-center justify-center gap-2 px-4 py-3.5 text-on-surface-variant hover:text-white font-medium rounded-xl transition-all text-sm font-mono" href="tel:+919210721868">
+                <span class="material-symbols-outlined text-primary-light text-[18px]">phone_in_talk</span>
+                <span>+91 92107 21868</span>
+              </a>
+            </div>
+
+            <!-- Trust Badges List -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-outline-subtle/80">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary-light shrink-0">
+                  <span class="material-symbols-outlined text-[18px]">schedule</span>
+                </div>
+                <div>
+                  <div class="text-xs text-on-surface-variant">Quick Arrival</div>
+                  <div class="text-xs sm:text-sm font-semibold text-white">Doorstep in 60m</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-status-healthy/10 flex items-center justify-center text-status-healthy shrink-0">
+                  <span class="material-symbols-outlined text-[18px]">currency_rupee</span>
+                </div>
+                <div>
+                  <div class="text-xs text-on-surface-variant">Zero Risk</div>
+                  <div class="text-xs sm:text-sm font-semibold text-white">No Fix, No Fee</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                  <span class="material-symbols-outlined text-[18px]">verified</span>
+                </div>
+                <div>
+                  <div class="text-xs text-on-surface-variant">Genuine Care</div>
+                  <div class="text-xs sm:text-sm font-semibold text-white">Up to 1-Yr Warranty</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0">
+                  <span class="material-symbols-outlined text-[18px]">star</span>
+                </div>
+                <div>
+                  <div class="text-xs text-on-surface-variant">Trusted in East Delhi</div>
+                  <div class="text-xs sm:text-sm font-semibold text-white">10,000+ Customers</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Right Column: Clean Bench Photography Showcase (Screen 5) -->
+          <div class="lg:col-span-5 relative">
+            <div class="relative rounded-2xl overflow-hidden border border-outline-subtle shadow-2xl bg-surface-card group">
+              <img alt="Expert technician carefully repairing unibody laptop motherboard at clean precision workbench" class="w-full h-[420px] object-cover group-hover:scale-[1.03] transition-transform duration-500" src="assets/images/repair-lab.jpg"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-surface-base/90 via-surface-base/20 to-transparent"></div>
+              
+              <!-- Floating Live Telemetry Badge -->
+              <div class="absolute top-4 right-4 px-3 py-1.5 rounded-lg bg-surface-base/80 backdrop-blur-md border border-outline-subtle text-xs font-mono text-accent flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-status-healthy animate-ping"></span>
+                <span>LIVE LAB TELEMETRY</span>
+              </div>
+
+              <!-- Floating Friendly Badge -->
+              <div class="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-surface-card/95 backdrop-blur-md border border-outline-subtle shadow-lg flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-status-healthy/20 text-status-healthy flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[22px]">thumb_up</span>
+                  </div>
+                  <div>
+                    <div class="text-sm font-semibold text-white">100% Repaired in Front of You</div>
+                    <div class="text-xs text-on-surface-variant">Complete privacy &amp; verified original components</div>
+                  </div>
+                </div>
+                <span class="hidden sm:inline-block px-2.5 py-1 rounded text-xs font-semibold bg-primary/20 text-primary-light">
+                  Doorstep Ready
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: SIMPLIFIED INTERACTIVE ISSUE SELECTOR (TRIAGE) -->
+    <section class="py-16 bg-surface-subtle/60 border-y border-outline-subtle" id="triage">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div class="max-w-2xl">
+            <span class="text-accent text-xs sm:text-sm font-semibold uppercase tracking-wider font-mono">Quick Diagnostic</span>
+            <h2 class="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl text-white mt-1">
+              What issue are you facing today?
+            </h2>
+            <p class="text-on-surface-variant text-sm sm:text-base mt-2">
+              Select your symptom to view an upfront cost estimate, repair turnaround time, and lock your doorstep slot.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-on-surface-variant bg-surface-card px-3 py-2 rounded-xl border border-outline-subtle self-start md:self-auto">
+            <span class="w-2 h-2 rounded-full bg-status-healthy"></span>
+            <span>Free phone diagnosis · No obligation</span>
+          </div>
+        </div>
+
+        <!-- 8 Human-friendly symptom cards + Summary Box Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Cards Grid (Span 7) -->
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3" id="symptom-container">
+            
+            <!-- Card 1 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-primary/50 transition-all flex flex-col gap-2 relative ring-1 ring-primary/40" 
+                 data-title="Laptop Won't Turn On" 
+                 data-code="ERR_PWR_01"
+                 data-desc="Complete power failure, blinking lights with no screen display, or dead charging socket." 
+                 data-price="From ₹499" 
+                 data-time="45–60 Mins" 
+                 data-includes="Motherboard circuit test, power IC check, charger check, free doorstep estimate" 
+                 data-warranty="90-Day Full Repair Warranty">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">power_off</span>
+                </div>
+                <span class="text-xs font-semibold text-primary-light">Most Common</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">Laptop Won't Turn On</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">No power response, blinking light, or shuts off immediately.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-outline-subtle transition-all flex flex-col gap-2" 
+                 data-title="Broken Screen / Display Lines" 
+                 data-code="ERR_DISP_02"
+                 data-desc="Cracked LCD glass, colored vertical lines, flickering screen, or dark backlight." 
+                 data-price="Original Screens from ₹2,200" 
+                 data-time="30–45 Mins" 
+                 data-includes="Brand new original display panel, bezel restoration, color calibration" 
+                 data-warranty="180-Day Screen Warranty">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">splitscreen</span>
+                </div>
+                <span class="text-xs text-on-surface-variant">Same Day</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">Broken Screen / Display</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Flickering, lines, cracked glass, or black screen with sound.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-outline-subtle transition-all flex flex-col gap-2" 
+                 data-title="Overheating & Slow" 
+                 data-code="ERR_THRM_03"
+                 data-desc="Loud buzzing fan noise, laptop gets hot to touch, system freeze, or frequent restarts." 
+                 data-includes="Internal thermal fan hydro-cleaning, Arctic MX-4 thermal paste repasting, dust removal" 
+                 data-price="Full Service from ₹650" 
+                 data-time="45 Mins" 
+                 data-warranty="Thermal Performance Guarantee">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">mode_fan</span>
+                </div>
+                <span class="text-xs text-on-surface-variant">At Your Home</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">Overheating &amp; Slow</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Noisy fan, very hot bottom, freezing, or slow multitasking.</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-outline-subtle transition-all flex flex-col gap-2" 
+                 data-title="Battery Dying Fast" 
+                 data-code="ERR_BATT_04"
+                 data-desc="Battery drains in minutes, doesn't charge above 0%, or trackpad is pushing up due to swelling." 
+                 data-includes="100% genuine OEM battery replacement, cycle test, disposal of old battery" 
+                 data-price="OEM Batteries from ₹1,650" 
+                 data-time="30 Mins" 
+                 data-warranty="1-Year Full Battery Guarantee">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">battery_alert</span>
+                </div>
+                <span class="text-xs text-on-surface-variant">Doorstep Swap</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">Battery Dying Fast</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Drains in 15 mins, doesn't hold charge, or battery swollen.</p>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-outline-subtle transition-all flex flex-col gap-2" 
+                 data-title="Data Recovery & SSD Upgrade" 
+                 data-code="ERR_DATA_05"
+                 data-desc="Accidentally deleted files, external hard disk not detected, clicking sounds, or Windows crash." 
+                 data-includes="Forensic drive evaluation, photos & doc extraction, confidential handling under NDA" 
+                 data-price="Diagnostics Free · From ₹1,500" 
+                 data-time="12–48 Hours" 
+                 data-warranty="Strict 100% Data Privacy">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">database</span>
+                </div>
+                <span class="text-xs text-on-surface-variant">Class-100 Lab</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">Data Recovery &amp; SSD</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Clicking drive, missing folders, or upgrade to superfast SSD.</p>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-outline-subtle transition-all flex flex-col gap-2" 
+                 data-title="Spilled Liquid / Water Damage" 
+                 data-code="ERR_LIQD_06"
+                 data-desc="Water, tea, or coffee spilled on keyboard. Laptop turns off or keys type randomly." 
+                 data-includes="Emergency power cutoff, motherboard ultrasonic chemical de-oxidation, keyboard inspection" 
+                 data-price="Cleaning & Triage from ₹850" 
+                 data-time="Same-Day Dispatch" 
+                 data-warranty="90-Day Post-Clean Cover">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">water_damage</span>
+                </div>
+                <span class="text-xs text-red-400 font-medium">Urgent Care</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">Spilled Liquid / Water</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Water or coffee spill, sticky keyboard, or won't turn on.</p>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-outline-subtle transition-all flex flex-col gap-2" 
+                 data-title="CCTV Camera Setup & Fixing" 
+                 data-code="ERR_CCTV_07"
+                 data-desc="Cameras not showing video on phone, NVR beeping, new home or office surveillance installation." 
+                 data-includes="Hikvision / CP Plus setup, phone remote viewing app, cabling & night vision test" 
+                 data-price="Visit & Fix from ₹450" 
+                 data-time="1–2 Hours" 
+                 data-warranty="Installation Guarantee">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">videocam</span>
+                </div>
+                <span class="text-xs text-on-surface-variant">Home &amp; Office</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">CCTV Camera Setup</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Camera offline, mobile app sync, or new HD camera setup.</p>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="symptom-card cursor-pointer p-4 rounded-xl bg-surface-card hover:bg-surface-elevated border border-outline-subtle transition-all flex flex-col gap-2" 
+                 data-title="Buy Refurbished Laptops" 
+                 data-code="REF_TECH_08"
+                 data-desc="Certified pre-owned ThinkPads, MacBooks & Dell laptops thoroughly tested with warranty." 
+                 data-includes="32-point physical & battery diagnostic, brand new SSD, genuine Windows/macOS" 
+                 data-price="Starting from ₹14,999" 
+                 data-time="Immediate Handover" 
+                 data-warranty="6 Months to 1-Yr Warranty">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[20px]">laptop_mac</span>
+                </div>
+                <span class="text-xs text-status-healthy font-medium">In Stock</span>
+              </div>
+              <h3 class="font-headline font-semibold text-base text-white">Buy Refurbished Laptops</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Grade-A corporate laptops with warranty at fraction of price.</p>
+            </div>
+
+          </div>
+
+          <!-- Interactive Estimate Summary Box (Span 5) -->
+          <div class="lg:col-span-5 sticky top-28">
+            <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle shadow-xl flex flex-col gap-5">
+              <div class="flex items-center justify-between border-b border-outline-subtle pb-3">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-accent text-[20px]">task_alt</span>
+                  <span class="text-xs font-semibold uppercase tracking-wider text-accent font-mono">Selected Repair Estimate</span>
+                </div>
+                <span class="text-xs text-status-healthy bg-status-healthy/10 px-2 py-0.5 rounded font-medium">Doorstep Available</span>
+              </div>
+
+              <div>
+                <span class="text-xs text-on-surface-variant">Issue Selected:</span>
+                <h4 class="font-headline font-bold text-xl text-white mt-0.5" id="est-title">Laptop Won't Turn On</h4>
+                <p class="text-xs sm:text-sm text-on-surface-variant mt-1.5 leading-relaxed" id="est-desc">
+                  Complete power failure, blinking lights with no screen display, or dead charging socket.
+                </p>
+              </div>
+
+              <!-- Price & SLA chips -->
+              <div class="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-surface-subtle border border-outline-subtle">
+                <div>
+                  <div class="text-[11px] text-on-surface-variant uppercase font-medium">Starting Estimate</div>
+                  <div class="text-lg font-bold text-status-healthy mt-0.5 font-mono" id="est-price">From ₹499</div>
+                </div>
+                <div>
+                  <div class="text-[11px] text-on-surface-variant uppercase font-medium">Expected Time</div>
+                  <div class="text-lg font-bold text-white mt-0.5 font-mono" id="est-time">45–60 Mins</div>
+                </div>
+              </div>
+
+              <div class="space-y-2 text-xs sm:text-sm text-on-surface-variant">
+                <div class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">check_circle</span>
+                  <span><strong class="text-on-surface">What's included:</strong> <span id="est-includes">Motherboard circuit test, power IC check, charger check, free doorstep estimate</span></span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-status-healthy text-[18px] shrink-0 mt-0.5">shield</span>
+                  <span><strong class="text-on-surface">Peace of mind:</strong> <span id="est-warranty">90-Day Full Repair Warranty</span></span>
+                </div>
+              </div>
+
+              <div class="pt-2 flex flex-col gap-2">
+                <button class="w-full py-3.5 px-4 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl text-center shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 text-sm sm:text-base cursor-pointer" id="est-book-btn" type="button">
+                  <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                  <span>Book Repair for this Issue</span>
+                </button>
+                <div class="flex items-center justify-between text-xs text-on-surface-variant px-1 pt-1 font-mono">
+                  <span>✓ Pay only after satisfaction</span>
+                  <span>✓ Cash / UPI / Cards</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: CORE SERVICES GRID -->
+    <section class="py-20 bg-surface-base" id="services">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-12">
+        <div class="text-center max-w-2xl mx-auto flex flex-col gap-3">
+          <span class="text-accent text-xs sm:text-sm font-semibold uppercase tracking-wider font-mono">Comprehensive Tech Care</span>
+          <h2 class="font-headline font-bold text-3xl sm:text-4xl text-white">
+            Our Core Services
+          </h2>
+          <p class="text-on-surface-variant text-sm sm:text-base">
+            From quick screen replacements to complete business CCTV networks, our certified engineers handle everything with genuine parts and upfront pricing.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Service 1: Laptop & MacBook Repair -->
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle hover:border-outline transition-all flex flex-col justify-between gap-6 group">
+            <div class="flex flex-col gap-4">
+              <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary-light flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-[28px]">laptop</span>
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-xl text-white">Laptop &amp; MacBook Repair</h3>
+                <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">
+                  Specialized repair for Apple MacBook, Dell, HP, Lenovo, and Asus. Screen replacement, keyboard fixes, charging jack repair, and motherboard micro-soldering.
+                </p>
+              </div>
+              <ul class="space-y-1.5 text-xs sm:text-sm text-on-surface-variant">
+                <li class="flex items-center gap-2"><span class="text-primary">•</span> Original OEM screens &amp; batteries</li>
+                <li class="flex items-center gap-2"><span class="text-primary">•</span> Motherboard chip-level repair</li>
+                <li class="flex items-center gap-2"><span class="text-primary">•</span> macOS &amp; Windows reinstallations</li>
+              </ul>
+            </div>
+            <div class="pt-4 border-t border-outline-subtle flex items-center justify-between">
+              <span class="text-xs font-semibold text-status-healthy font-mono">From ₹499 · 60m Doorstep</span>
+              <button class="open-modal-trigger text-xs font-semibold text-primary-light hover:text-white flex items-center gap-1 cursor-pointer" type="button">
+                Book Visit <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Service 2: Home & Office IT Support -->
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle hover:border-outline transition-all flex flex-col justify-between gap-6 group">
+            <div class="flex flex-col gap-4">
+              <div class="w-12 h-12 rounded-xl bg-accent/10 text-accent flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-[28px]">router</span>
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-xl text-white">Doorstep Home &amp; Office IT Support</h3>
+                <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">
+                  Smooth Wi-Fi network setup, printer configuration, PC speed optimization, antivirus security, and routine office AMC maintenance for small businesses.
+                </p>
+              </div>
+              <ul class="space-y-1.5 text-xs sm:text-sm text-on-surface-variant">
+                <li class="flex items-center gap-2"><span class="text-accent">•</span> Wi-Fi router &amp; range extender mesh</li>
+                <li class="flex items-center gap-2"><span class="text-accent">•</span> Network printer &amp; scanner sharing</li>
+                <li class="flex items-center gap-2"><span class="text-accent">•</span> Annual maintenance contracts (AMC)</li>
+              </ul>
+            </div>
+            <div class="pt-4 border-t border-outline-subtle flex items-center justify-between">
+              <span class="text-xs font-semibold text-status-healthy font-mono">From ₹450 / Visit</span>
+              <button class="open-modal-trigger text-xs font-semibold text-accent hover:text-white flex items-center gap-1 cursor-pointer" type="button">
+                Book Visit <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Service 3: 4K CCTV Installation (Featured with Screen 6 Image) -->
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle hover:border-outline transition-all flex flex-col justify-between gap-6 group md:col-span-2 lg:col-span-1">
+            <div class="flex flex-col gap-4">
+              <div class="rounded-xl overflow-hidden h-36 border border-outline-subtle relative">
+                <img alt="Neat professional CCTV security setup with rack and monitor" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="assets/images/cctv-setup.jpg"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-surface-base/80 to-transparent"></div>
+                <div class="absolute bottom-2 left-2 text-[11px] font-medium text-white bg-surface-card/80 px-2 py-0.5 rounded backdrop-blur-sm font-mono">
+                  Hikvision &amp; CP Plus Certified
+                </div>
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-xl text-white">4K CCTV Installation &amp; Security</h3>
+                <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">
+                  High-definition smart security cameras for homes, shops, and offices. Live viewing on your phone, night color vision, and tidy concealed cabling.
+                </p>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-outline-subtle flex items-center justify-between">
+              <span class="text-xs font-semibold text-status-healthy font-mono">Free Site Survey &amp; Quote</span>
+              <button class="open-modal-trigger text-xs font-semibold text-primary-light hover:text-white flex items-center gap-1 cursor-pointer" type="button">
+                Schedule Survey <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Service 4: Cleanroom Data Recovery -->
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle hover:border-outline transition-all flex flex-col justify-between gap-6 group">
+            <div class="flex flex-col gap-4">
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-[28px]">lock_reset</span>
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-xl text-white">Cleanroom Data Recovery</h3>
+                <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">
+                  Recover valuable family memories and crucial business accounting files from dead hard disks, clicked external drives, formatted SSDs, and pen drives.
+                </p>
+              </div>
+              <ul class="space-y-1.5 text-xs sm:text-sm text-on-surface-variant">
+                <li class="flex items-center gap-2"><span class="text-status-healthy">•</span> Free inspection &amp; no data, no charge</li>
+                <li class="flex items-center gap-2"><span class="text-status-healthy">•</span> Signed NDA for complete privacy</li>
+                <li class="flex items-center gap-2"><span class="text-status-healthy">•</span> 95%+ recovery success rate</li>
+              </ul>
+            </div>
+            <div class="pt-4 border-t border-outline-subtle flex items-center justify-between">
+              <span class="text-xs font-semibold text-status-healthy font-mono">Free Evaluation</span>
+              <button class="open-modal-trigger text-xs font-semibold text-status-healthy hover:text-white flex items-center gap-1 cursor-pointer" type="button">
+                Call Expert <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Service 5: Certified Pre-Owned Laptops -->
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle hover:border-outline transition-all flex flex-col justify-between gap-6 group md:col-span-2 lg:col-span-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+              <div class="flex flex-col gap-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span class="material-symbols-outlined text-[28px]">verified_user</span>
+                </div>
+                <div>
+                  <h3 class="font-headline font-bold text-xl text-white">Certified Pre-Owned Laptops</h3>
+                  <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">
+                    Looking for a reliable machine without paying showroom prices? We stock rigorously bench-tested enterprise laptops with pristine battery health and full warranty.
+                  </p>
+                </div>
+                <div class="flex flex-wrap gap-2 pt-1 font-mono">
+                  <span class="px-2.5 py-1 rounded bg-surface-subtle text-xs text-on-surface-variant border border-outline-subtle">Lenovo ThinkPad</span>
+                  <span class="px-2.5 py-1 rounded bg-surface-subtle text-xs text-on-surface-variant border border-outline-subtle">Apple MacBook Air / Pro</span>
+                  <span class="px-2.5 py-1 rounded bg-surface-subtle text-xs text-on-surface-variant border border-outline-subtle">Dell Latitude</span>
+                </div>
+              </div>
+              <div class="p-5 rounded-xl bg-surface-subtle border border-outline-subtle flex flex-col gap-3">
+                <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider font-mono">Quality Assurance</div>
+                <div class="text-2xl font-bold text-white font-mono">Starts at ₹14,999</div>
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Every laptop undergoes a 32-point inspection, brand new high-speed SSD upgrade, fresh thermal repasting, and comes with a 6-month replacement warranty.
+                </p>
+                <a class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface-card hover:bg-surface-elevated text-white border border-outline-subtle text-xs font-semibold transition-all" href="https://wa.me/919210721868?text=Hi,%20I%20want%20to%20see%20available%20certified%20laptops" target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-status-healthy text-[16px]">chat</span>
+                  <span>View Current Stock on WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- SECTION 3.5: CERTIFIED SECOND-HAND LAPTOPS & PRODUCTS (JUSTDIAL VERIFIED CATALOGUE) -->
+    <section class="py-20 bg-surface-subtle/50 border-t border-outline-subtle" id="pre-owned-laptops">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div class="max-w-3xl flex flex-col gap-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-card border border-outline-subtle text-xs text-accent font-mono w-fit">
+              <span class="material-symbols-outlined text-[15px] text-amber-400">verified</span>
+              <span>Justdial Verified Business Catalogue · Patparganj, East Delhi</span>
+            </div>
+            <h2 class="font-headline font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+              Certified Second-Hand Laptops &amp; Tech Deals
+            </h2>
+            <p class="text-on-surface-variant text-sm sm:text-base leading-relaxed">
+              Tested &amp; certified pre-owned enterprise laptops, workstation grade machines, creator rigs, and genuine accessories directly from our Patparganj store. Every laptop includes a <strong>32-point hardware inspection, clean OS installation, brand-new SSD upgrade, and up to 6 months replacement warranty</strong>.
+            </p>
+          </div>
+
+          <!-- Store Trust Mini Pill -->
+          <div class="p-4 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-2 self-start md:self-auto shrink-0 font-mono text-xs">
+            <div class="flex items-center gap-2 text-status-healthy">
+              <span class="material-symbols-outlined text-[18px]">storefront</span>
+              <span class="font-semibold text-white">Patparganj Walk-in Store</span>
+            </div>
+            <span class="text-on-surface-variant">Near AVB Public School, Sawarkar Apts</span>
+            <div class="flex items-center justify-between gap-3 text-[11px] pt-1 border-t border-outline-subtle">
+              <span class="text-accent">Mon–Sun 9 AM–5 PM</span>
+              <span class="text-status-healthy font-semibold">Doorstep Demo Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Category Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="product-category-filters">
+          <button class="product-filter-btn px-4 py-2 rounded-xl bg-primary text-white font-mono text-xs font-semibold whitespace-nowrap shadow-md transition-all cursor-pointer" data-filter="all" type="button">
+            All Products (12)
+          </button>
+          <button class="product-filter-btn px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-elevated text-on-surface-variant font-mono text-xs font-medium whitespace-nowrap border border-outline-subtle transition-all cursor-pointer" data-filter="cat-business" type="button">
+            Business &amp; Work (5)
+          </button>
+          <button class="product-filter-btn px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-elevated text-on-surface-variant font-mono text-xs font-medium whitespace-nowrap border border-outline-subtle transition-all cursor-pointer" data-filter="cat-gaming" type="button">
+            High-End Gaming &amp; ROG (3)
+          </button>
+          <button class="product-filter-btn px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-elevated text-on-surface-variant font-mono text-xs font-medium whitespace-nowrap border border-outline-subtle transition-all cursor-pointer" data-filter="cat-touch" type="button">
+            2-in-1 Touchscreen (1)
+          </button>
+          <button class="product-filter-btn px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-elevated text-on-surface-variant font-mono text-xs font-medium whitespace-nowrap border border-outline-subtle transition-all cursor-pointer" data-filter="cat-budget" type="button">
+            Budget &amp; Student (2)
+          </button>
+          <button class="product-filter-btn px-4 py-2 rounded-xl bg-surface-card hover:bg-surface-elevated text-on-surface-variant font-mono text-xs font-medium whitespace-nowrap border border-outline-subtle transition-all cursor-pointer" data-filter="cat-accessories" type="button">
+            Keyboards &amp; Mice (2)
+          </button>
+        </div>
+
+        <!-- Product Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="product-grid">
+          
+          <!-- Product Card: DELL Vostro 3520 (11th Gen) -->
+          <div class="product-item cat-business p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="DELL Vostro 3520 (11th Gen)" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/dell-vostro-3520.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Popular Business
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  60% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Grade A+ Refurbished · 100% Tested
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  DELL Vostro 3520 (11th Gen)
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  15.6" FHD | Intel Core i5 11th Gen | 16GB RAM | 512GB SSD
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹21,999</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹54,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20DELL%20Vostro%203520%20%2811th%20Gen%29%20%28%E2%82%B921%2C999%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="DELL Vostro 3520 (11th Gen)"
+                        data-product-price="₹21,999">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: ASUS ROG Strix G16 Gaming (14th Gen) -->
+          <div class="product-item cat-gaming p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="ASUS ROG Strix G16 Gaming (14th Gen)" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/asus-rog-strix-g16.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  High Performance Gaming
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  52% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Pristine Benchmark Tested · RGB Aura Sync
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  ASUS ROG Strix G16 Gaming (14th Gen)
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  16" 165Hz FHD+ | Intel Core i7 14th Gen | 16GB DDR5 | RTX 4060 8GB
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹68,999</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹1,44,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20ASUS%20ROG%20Strix%20G16%20Gaming%20%2814th%20Gen%29%20%28%E2%82%B968%2C999%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="ASUS ROG Strix G16 Gaming (14th Gen)"
+                        data-product-price="₹68,999">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: DELL G15 Gaming Edition -->
+          <div class="product-item cat-gaming p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="DELL G15 Gaming Edition" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/dell-g15-gaming.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Heavy Duty Gaming
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  50% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Rigorous Thermal Stress Tested · Backlit Keyboard
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  DELL G15 Gaming Edition
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  15.6" 120Hz | AMD Ryzen 7 / Intel Core | 16GB RAM | RTX Graphics
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹44,999</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹89,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20DELL%20G15%20Gaming%20Edition%20%28%E2%82%B944%2C999%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="DELL G15 Gaming Edition"
+                        data-product-price="₹44,999">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: Dell Inspiron 16 Plus (i7-13700H) -->
+          <div class="product-item cat-business p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="Dell Inspiron 16 Plus (i7-13700H)" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/dell-inspiron-16-plus.png"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Creator & Workstation
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  54% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Like New Executive Unit · Studio Grade Display
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  Dell Inspiron 16 Plus (i7-13700H)
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  16" 2.5K WVA Display | Intel Core i7-13700H (14 Cores) | 16GB RAM | 1TB NVMe SSD
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹52,999</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹1,15,000</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20Dell%20Inspiron%2016%20Plus%20%28i7-13700H%29%20%28%E2%82%B952%2C999%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="Dell Inspiron 16 Plus (i7-13700H)"
+                        data-product-price="₹52,999">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: HP Pavilion 14 (12th Gen) -->
+          <div class="product-item cat-business p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="HP Pavilion 14 (12th Gen)" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/hp-pavilion-14.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Premium Ultrabook
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  57% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Grade A+ Clean Aluminum Chassis · 100% Battery
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  HP Pavilion 14 (12th Gen)
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  14" IPS Micro-Edge FHD | Intel Core i5 12th Gen | 16GB RAM | B&O Sound
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹28,999</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹67,500</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20HP%20Pavilion%2014%20%2812th%20Gen%29%20%28%E2%82%B928%2C999%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="HP Pavilion 14 (12th Gen)"
+                        data-product-price="₹28,999">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: ASUS Vivobook S 14 OLED / NanoEdge -->
+          <div class="product-item cat-business p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="ASUS Vivobook S 14 OLED / NanoEdge" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/asus-vivobook-s14.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Sleek Ultraportable
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  57% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Ultra Lightweight 1.4kg · Full Day Battery
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  ASUS Vivobook S 14 OLED / NanoEdge
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  14" NanoEdge Bezel | Intel Core i5 | 16GB RAM | Fast 512GB SSD
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹26,499</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹61,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20ASUS%20Vivobook%20S%2014%20OLED%20/%20NanoEdge%20%28%E2%82%B926%2C499%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="ASUS Vivobook S 14 OLED / NanoEdge"
+                        data-product-price="₹26,499">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: Dell Inspiron 14 (2-in-1 Touchscreen) -->
+          <div class="product-item cat-touch p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="Dell Inspiron 14 (2-in-1 Touchscreen)" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/dell-inspiron-14-2in1.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  360° Convertible
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  58% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Multi-mode Tablet/Tent mode · Crisp Touch Panel
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  Dell Inspiron 14 (2-in-1 Touchscreen)
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  14" FHD Touch Display with 360° Hinge | Intel Core | 8GB RAM | Pen Support
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹24,999</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹58,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20Dell%20Inspiron%2014%20%282-in-1%20Touchscreen%29%20%28%E2%82%B924%2C999%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="Dell Inspiron 14 (2-in-1 Touchscreen)"
+                        data-product-price="₹24,999">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: HP Standard 15s (12th Gen) -->
+          <div class="product-item cat-budget p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="HP Standard 15s (12th Gen)" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/hp-standard-15s.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Student & Everyday Work
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  59% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Thoroughly Inspected · Smooth Keypad & Trackpad
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  HP Standard 15s (12th Gen)
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  15.6" Anti-Glare FHD | Intel Core i3/i5 12th Gen | 8GB RAM | 512GB SSD
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹20,499</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹49,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20HP%20Standard%2015s%20%2812th%20Gen%29%20%28%E2%82%B920%2C499%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="HP Standard 15s (12th Gen)"
+                        data-product-price="₹20,499">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: Asus Vivobook Go 14 -->
+          <div class="product-item cat-business p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="Asus Vivobook Go 14" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/asus-vivobook-go-14.png"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Compact Everyday
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  58% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Pristine Refurbished · 180° Lay-Flat Hinge
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  Asus Vivobook Go 14
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  14" HD Anti-Glare | Intel / AMD | 8GB RAM | 512GB High Speed SSD
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹17,999</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹42,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20Asus%20Vivobook%20Go%2014%20%28%E2%82%B917%2C999%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="Asus Vivobook Go 14"
+                        data-product-price="₹17,999">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: HP Essential Celeron Dual Core -->
+          <div class="product-item cat-budget p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="HP Essential Celeron Dual Core" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/hp-celeron.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Budget Friendly Workhorse
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  59% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Certified Entry-Level Laptop for Tally, Office, Billing & School
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    6 Months Onsite Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  HP Essential Celeron Dual Core
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  15.6" HD Display | Intel Celeron Dual Core | 8GB RAM | 256GB SSD
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹13,499</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹32,990</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20HP%20Essential%20Celeron%20Dual%20Core%20%28%E2%82%B913%2C499%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="HP Essential Celeron Dual Core"
+                        data-product-price="₹13,499">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: Lapcare Wired USB Ergonomic Keyboard -->
+          <div class="product-item cat-accessories p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="Lapcare Wired USB Ergonomic Keyboard" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/lapcare-keyboard.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Genuine Accessory
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  50% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Brand New Sealed Box
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    1-Year Manufacturer Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  Lapcare Wired USB Ergonomic Keyboard
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  Full Size 104 Keys | Spill Resistant | Soft-Touch Membrane | 1.5m Cable
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹399</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹799</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20Lapcare%20Wired%20USB%20Ergonomic%20Keyboard%20%28%E2%82%B9399%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="Lapcare Wired USB Ergonomic Keyboard"
+                        data-product-price="₹399">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card: Lapcare USB Optical Precision Mouse -->
+          <div class="product-item cat-accessories p-5 rounded-2xl bg-surface-card border border-outline-subtle hover:border-primary/50 transition-all flex flex-col justify-between gap-4 group shadow-lg">
+            <div class="flex flex-col gap-3">
+              <div class="relative rounded-xl overflow-hidden bg-surface-subtle p-3 h-48 flex items-center justify-center border border-outline-subtle/60">
+                <img alt="Lapcare USB Optical Precision Mouse" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="assets/products/lapcare-mouse.jpg"/>
+                <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-primary/20 text-accent border border-primary/40 font-mono text-[10px] font-semibold">
+                  Genuine Accessory
+                </span>
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-status-critical/20 text-status-critical border border-status-critical/30 font-mono text-[10px] font-bold">
+                  56% OFF
+                </span>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-status-healthy font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">verified</span> Brand New Sealed Box
+                  </span>
+                  <span class="text-[10px] font-mono text-on-surface-variant bg-surface-subtle px-1.5 py-0.5 rounded">
+                    1-Year Manufacturer Warranty
+                  </span>
+                </div>
+                <h3 class="font-headline font-bold text-base sm:text-lg text-white mt-1 group-hover:text-primary-light transition-colors">
+                  Lapcare USB Optical Precision Mouse
+                </h3>
+                <p class="text-xs text-on-surface-variant mt-1 font-mono leading-relaxed">
+                  1200 DPI High-Precision Optical Sensor | Plug & Play USB | Ambidextrous
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-outline-subtle flex flex-col gap-3">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant font-mono uppercase block">Deal Price</span>
+                  <span class="font-headline font-extrabold text-xl sm:text-2xl text-white font-mono">₹199</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-on-surface-variant font-mono line-through block">MRP ₹450</span>
+                  <span class="text-[11px] font-mono text-status-healthy font-semibold">Save Money</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <a class="py-2.5 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-semibold text-center flex items-center justify-center gap-1.5 transition-colors" 
+                   href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care%2C%20I%20am%20interested%20in%20buying%20the%20Lapcare%20USB%20Optical%20Precision%20Mouse%20%28%E2%82%B9199%29%20from%20your%20Patparganj%20store.%20Is%20it%20available%3F" 
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="material-symbols-outlined text-[16px]">chat</span>
+                  <span>Buy / Inquire</span>
+                </a>
+                <button class="open-modal-trigger py-2.5 px-2 rounded-xl bg-surface-elevated hover:bg-surface-container text-white border border-outline-subtle font-mono text-xs font-semibold text-center flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                        type="button" 
+                        data-product-title="Lapcare USB Optical Precision Mouse"
+                        data-product-price="₹199">
+                  <span>Book Demo</span>
+                  <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Verified Store & Payment Information Banner -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-surface-card border border-outline-subtle flex flex-col lg:flex-row items-center justify-between gap-6">
+          <div class="flex flex-col gap-2 max-w-2xl text-left">
+            <span class="text-xs font-mono text-status-healthy font-semibold flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">verified</span>
+              Justdial Rated 3.8★ · 100% Genuine Inspected Hardware
+            </span>
+            <h3 class="font-headline font-bold text-xl sm:text-2xl text-white">
+              Want to buy, sell, or trade your old laptop in East Delhi?
+            </h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+              Visit our Patparganj branch for instant spot testing &amp; cash buyback, or request an engineer to bring 2–3 selected second-hand models to your home or office for live demonstration before payment.
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full lg:w-auto">
+            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-xs sm:text-sm shadow-lg transition-all" 
+               href="tel:+919210721868">
+              <span class="material-symbols-outlined text-[18px]">call</span>
+              <span>Call Store: +91 92107 21868</span>
+            </a>
+            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm shadow-lg transition-all" 
+               href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care,%20I%20want%20to%20inquire%20about%20second-hand%20laptops%20available%20at%20Patparganj" 
+               target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined text-[18px]">chat</span>
+              <span>WhatsApp Store Rep</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- SECTION 4: WHY CHOOSE LAKSHAY (SIMPLE TRUST COMPARISON) -->
+    <section class="py-20 bg-surface-subtle/40 border-t border-outline-subtle" id="why-choose-us">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-12">
+        <div class="text-center max-w-2xl mx-auto flex flex-col gap-3">
+          <span class="text-accent text-xs sm:text-sm font-semibold uppercase tracking-wider font-mono">Peace Of Mind Guarantee</span>
+          <h2 class="font-headline font-bold text-3xl sm:text-4xl text-white">
+            Why East Delhi Chooses Lakshay
+          </h2>
+          <p class="text-on-surface-variant text-sm sm:text-base">
+            We removed all the stress, hidden surprises, and days of waiting that people usually dread with local repair shops.
+          </p>
+        </div>
+
+        <!-- 4 Benefit Pillars -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-primary-light flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[26px]">visibility</span>
+            </div>
+            <h3 class="font-headline font-bold text-lg text-white">100% On-Site Repair</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              No need to leave your precious laptop at an unfamiliar shop for days. Watch our certified engineer fix it right on your living room or office desk.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-status-healthy flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[26px]">price_check</span>
+            </div>
+            <h3 class="font-headline font-bold text-lg text-white">Fixed Upfront Pricing</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              Zero hidden fees or surprise invoices. You receive a clear, itemized quote and approve every single rupee before the technician begins work.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-xl bg-accent/10 text-accent flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[26px]">verified</span>
+            </div>
+            <h3 class="font-headline font-bold text-lg text-white">90-Day Doorstep Warranty</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              If the same issue recurs within 90 days, our technician visits your doorstep and resolves it completely free of charge. No questions asked.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[26px]">lock</span>
+            </div>
+            <h3 class="font-headline font-bold text-lg text-white">Strict Data Privacy</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              Your personal family photos, business folders, and confidential passwords remain 100% private. We never browse or touch user drives without permission.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: HOW IT WORKS (SIMPLE 3-STEP FLOW) -->
+    <section class="py-20 bg-surface-base" id="how-it-works">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-12">
+        <div class="text-center max-w-2xl mx-auto flex flex-col gap-3">
+          <span class="text-accent text-xs sm:text-sm font-semibold uppercase tracking-wider font-mono">Simple &amp; Frictionless</span>
+          <h2 class="font-headline font-bold text-3xl sm:text-4xl text-white">
+            How Doorstep Repair Works
+          </h2>
+          <p class="text-on-surface-variant text-sm sm:text-base">
+            Get your computer restored without stepping foot outside your door in three simple steps.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <!-- Step 1 -->
+          <div class="p-8 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4 relative">
+            <span class="text-5xl font-extrabold text-outline/50 font-headline">01</span>
+            <h3 class="font-headline font-bold text-xl text-white">Select Issue or Call Us</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              Choose your device fault on our website or call our priority desk directly. Describe what happened and get an immediate price estimate.
+            </p>
+            <div class="mt-auto pt-4 text-xs font-semibold text-primary-light flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">done</span> Instant booking confirmation
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-8 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4 relative">
+            <span class="text-5xl font-extrabold text-outline/50 font-headline">02</span>
+            <h3 class="font-headline font-bold text-xl text-white">Technician Arrives in 60m</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              A certified, background-verified hardware engineer arrives at your home or office equipped with diagnostic tools and genuine replacement parts.
+            </p>
+            <div class="mt-auto pt-4 text-xs font-semibold text-status-healthy flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">done</span> Live arrival tracking
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-8 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4 relative">
+            <span class="text-5xl font-extrabold text-outline/50 font-headline">03</span>
+            <h3 class="font-headline font-bold text-xl text-white">Repaired On-Site with Warranty</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              Your device is repaired right in front of you. Once thoroughly tested and confirmed working, pay via cash/UPI and receive your official warranty card.
+            </p>
+            <div class="mt-auto pt-4 text-xs font-semibold text-accent flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">done</span> 90-Day doorstep guarantee
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: SERVICE AREAS IN EAST DELHI -->
+    <section class="py-16 bg-surface-subtle/50 border-t border-outline-subtle" id="service-areas">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <span class="text-accent text-xs sm:text-sm font-semibold uppercase tracking-wider font-mono">Fast Local Dispatch</span>
+            <h2 class="font-headline font-bold text-2xl sm:text-3xl text-white mt-1">
+              Service Locations & Coverage
+            </h2>
+          </div>
+          <div class="text-xs sm:text-sm text-on-surface-variant">
+            Average technician arrival time: <strong class="text-status-healthy font-semibold font-mono">35–50 Minutes</strong>
+          </div>
+        </div>
+
+        <!-- East Delhi Hub Chips -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+          <div class="p-3.5 rounded-xl bg-surface-card border border-outline-subtle flex flex-col gap-1 text-center items-center hover:border-primary/40 transition-colors">
+            <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+            <span class="font-semibold text-xs sm:text-sm text-white">Laxmi Nagar</span>
+            <span class="text-[11px] text-status-healthy">Metro &amp; Market Hub</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-card border border-outline-subtle flex flex-col gap-1 text-center items-center hover:border-primary/40 transition-colors">
+            <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+            <span class="font-semibold text-xs sm:text-sm text-white">Preet Vihar</span>
+            <span class="text-[11px] text-status-healthy">Vikas Marg &amp; Swasthya</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-card border border-outline-subtle flex flex-col gap-1 text-center items-center hover:border-primary/40 transition-colors">
+            <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+            <span class="font-semibold text-xs sm:text-sm text-white">Mayur Vihar</span>
+            <span class="text-[11px] text-status-healthy">Phases 1, 2 &amp; 3</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-card border border-outline-subtle flex flex-col gap-1 text-center items-center hover:border-primary/40 transition-colors">
+            <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+            <span class="font-semibold text-xs sm:text-sm text-white">Nirman Vihar</span>
+            <span class="text-[11px] text-status-healthy">Commercial &amp; G-Block</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-card border border-outline-subtle flex flex-col gap-1 text-center items-center hover:border-primary/40 transition-colors">
+            <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+            <span class="font-semibold text-xs sm:text-sm text-white">IP Extension</span>
+            <span class="text-[11px] text-status-healthy">Patparganj Societies</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-card border border-outline-subtle flex flex-col gap-1 text-center items-center hover:border-primary/40 transition-colors">
+            <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+            <span class="font-semibold text-xs sm:text-sm text-white">Anand Vihar</span>
+            <span class="text-[11px] text-status-healthy">ISBT &amp; Surajmal Vihar</span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-surface-card border border-outline-subtle flex flex-col gap-1 text-center items-center hover:border-primary/40 transition-colors">
+            <span class="material-symbols-outlined text-primary text-[20px]">location_on</span>
+            <span class="font-semibold text-xs sm:text-sm text-white">Krishna Nagar</span>
+            <span class="text-[11px] text-status-healthy">Lal Quarter &amp; Gandhi Ngr</span>
+          </div>
+        </div>
+        <!-- Interactive Service Center Map Card -->
+        <div class="mt-4 p-5 sm:p-6 rounded-2xl bg-surface-card border border-outline-subtle shadow-xl flex flex-col lg:flex-row gap-6 items-stretch">
+          <div class="lg:w-1/3 flex flex-col justify-between gap-4">
+            <div class="flex flex-col gap-2">
+              <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent font-mono text-xs w-fit">
+                <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+                <span>CENTRAL HUB & WALK-IN LAB</span>
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-white font-headline">Lakshay Computer Care Store</h3>
+              <p class="text-xs text-on-surface-variant leading-relaxed">
+                Savarkar Apartments, 39, I.P. Extension, Patparganj, East Delhi &mdash; 110092.<br/>
+                <span class="text-outline font-mono text-[11px]">Landmark: Near AVB Public School &amp; Mother Dairy</span>
+              </p>
+              
+              <div class="grid grid-cols-2 gap-2 pt-2 text-xs font-mono">
+                <div class="p-2.5 rounded-lg bg-surface-subtle border border-outline-subtle flex flex-col">
+                  <span class="text-outline text-[10px]">WALK-IN HOURS</span>
+                  <span class="text-white font-semibold">9:00 AM &ndash; 5:00 PM</span>
+                  <span class="text-[10px] text-status-healthy">Mon &ndash; Sun Open</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-surface-subtle border border-outline-subtle flex flex-col">
+                  <span class="text-outline text-[10px]">DOORSTEP DISPATCH</span>
+                  <span class="text-white font-semibold">8:00 AM &ndash; 10:00 PM</span>
+                  <span class="text-[10px] text-accent">35-50 Min Arrival</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2 pt-2 border-t border-outline-subtle">
+              <div class="flex items-center gap-2">
+                <a href="https://maps.google.com/?q=Savarkar+Apartments,+39,+I.P.Extension,+Patparganj,+Delhi,+110092" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-xs transition-all shadow-md">
+                  <span class="material-symbols-outlined text-[16px]">directions</span>
+                  <span>Get Driving Directions</span>
+                </a>
+                <a href="tel:+919210721868" class="inline-flex items-center justify-center px-3 py-2.5 rounded-xl bg-surface-subtle hover:bg-surface-elevated text-white border border-outline-subtle text-xs transition-all" title="Call Store">
+                  <span class="material-symbols-outlined text-[16px] text-accent">call</span>
+                </a>
+              </div>
+              <a href="https://wa.me/919210721868?text=Hi%20Lakshay%20Computer%20Care,%20I%20am%20visiting%20your%20Patparganj%20store%20at%20Savarkar%20Apartments" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 text-xs text-status-healthy hover:text-white font-mono transition-colors">
+                <span class="material-symbols-outlined text-[14px]">chat</span>
+                <span>Confirm Store Availability on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Embedded Map Frame -->
+          <div class="lg:w-2/3 h-64 sm:h-80 lg:h-auto min-h-[260px] rounded-xl overflow-hidden border border-outline-subtle relative bg-surface-subtle">
+            <iframe 
+              title="Lakshay Computer Care Store Location - Savarkar Apartments Patparganj"
+              src="https://maps.google.com/maps?q=Savarkar+Apartments,+39,+I.P.Extension,+Patparganj,+Delhi,+110092&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+              width="100%" 
+              height="100%" 
+              style="border:0; min-height: 260px; filter: grayscale(15%) contrast(1.05);" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            <div class="absolute bottom-2 right-2 bg-surface-base/90 backdrop-blur-md px-2.5 py-1 rounded border border-outline-subtle text-[10px] font-mono text-on-surface-variant pointer-events-none flex items-center gap-1">
+              <span class="material-symbols-outlined text-[12px] text-accent">pin_drop</span>
+              <span>Savarkar Apts, 39, I.P. Extn, Patparganj</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 7: CUSTOMER REVIEWS -->
+    <section class="py-16 bg-surface-base" id="reviews">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
+        <div class="text-center max-w-xl mx-auto flex flex-col gap-2">
+          <div class="flex items-center justify-center gap-1 text-amber-400">
+            <span class="material-symbols-outlined text-[20px]">star</span>
+            <span class="material-symbols-outlined text-[20px]">star</span>
+            <span class="material-symbols-outlined text-[20px]">star</span>
+            <span class="material-symbols-outlined text-[20px]">star</span>
+            <span class="material-symbols-outlined text-[20px]">star</span>
+          </div>
+          <h2 class="font-headline font-bold text-2xl sm:text-3xl text-white">
+            Loved by 10,000+ Home &amp; Office Users
+          </h2>
+          <p class="text-xs sm:text-sm text-on-surface-variant font-mono">4.9/5 Average Rating across Google Reviews in East Delhi</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4">
+            <div class="flex items-center gap-1 text-amber-400 text-xs">
+              ★★★★★
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              "My MacBook screen stopped working in the middle of urgent client work. Rahul from Lakshay came to my home in Laxmi Nagar within 35 minutes and replaced the display right in front of me. Super transparent and friendly!"
+            </p>
+            <div class="mt-auto pt-2 flex items-center gap-3 border-t border-outline-subtle">
+              <div class="w-8 h-8 rounded-full bg-primary/20 text-primary-light flex items-center justify-center font-bold text-xs">AK</div>
+              <div>
+                <div class="text-xs font-semibold text-white">Amitav Khanna</div>
+                <div class="text-[11px] text-on-surface-variant font-mono">Laxmi Nagar, East Delhi · MacBook Air M1</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4">
+            <div class="flex items-center gap-1 text-amber-400 text-xs">
+              ★★★★★
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              "Local shops quoted me ₹6,000 saying my motherboard was dead. Lakshay technician diagnosed a simple blown charging pin and fixed it for ₹850. Real honesty is so rare in this trade. 100% recommended!"
+            </p>
+            <div class="mt-auto pt-2 flex items-center gap-3 border-t border-outline-subtle">
+              <div class="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center font-bold text-xs">PS</div>
+              <div>
+                <div class="text-xs font-semibold text-white">Pooja Sharma</div>
+                <div class="text-[11px] text-on-surface-variant font-mono">Preet Vihar, East Delhi · Dell XPS</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-surface-card border border-outline-subtle flex flex-col gap-4">
+            <div class="flex items-center gap-1 text-amber-400 text-xs">
+              ★★★★★
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              "We had our 8-camera CCTV system and office Wi-Fi setup done for our studio in Mayur Vihar Phase 1. Extremely clean wiring, zero clutter, and very polite engineers. They also trained our team on the mobile app."
+            </p>
+            <div class="mt-auto pt-2 flex items-center gap-3 border-t border-outline-subtle">
+              <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">VK</div>
+              <div>
+                <div class="text-xs font-semibold text-white">Vikramaditya K.</div>
+                <div class="text-[11px] text-on-surface-variant font-mono">Mayur Vihar Ph 1, East Delhi · Commercial Studio</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: CALL TO ACTION BANNER -->
+    <section class="py-16 bg-surface-subtle border-t border-outline-subtle">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-surface-card via-surface-elevated to-surface-card border border-outline-subtle flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+          <div class="max-w-xl flex flex-col gap-2">
+            <span class="text-accent text-xs font-semibold uppercase tracking-wider font-mono">Fast Assistance</span>
+            <h2 class="font-headline font-bold text-2xl sm:text-3xl text-white">
+              Need immediate repair at your doorstep?
+            </h2>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              Speak directly with an experienced technician right now. Tell us your issue, and we'll dispatch an engineer to your location within 60 minutes.
+            </p>
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs text-on-surface-variant font-mono">
+              <span class="flex items-center gap-1 text-status-healthy">✓ No Fix, No Fee</span>
+              <span class="flex items-center gap-1 text-status-healthy">✓ Genuine Parts</span>
+              <span class="flex items-center gap-1 text-status-healthy">✓ 90-Day Warranty</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-center lg:justify-end gap-3 shrink-0 w-full lg:w-auto">
+            <a class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold shadow-lg shadow-primary/25 transition-all text-sm" href="tel:+919210721868">
+              <span class="material-symbols-outlined text-[19px]">call</span>
+              <span>Call: +91 92107 21868</span>
+            </a>
+            <a class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-lg shadow-emerald-600/25 transition-all text-sm" href="https://wa.me/919210721868" target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined text-[19px]">chat</span>
+              <span>Chat on WhatsApp</span>
+            </a>
+            <a class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-surface-card hover:bg-surface-elevated text-on-surface hover:text-white border border-outline-subtle font-medium transition-all text-sm" href="mailto:lakshaybatra90@gmail.com?subject=East%20Delhi%20Service%20Inquiry">
+              <span class="material-symbols-outlined text-accent text-[19px]">mail</span>
+              <span>Email Us</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FLOATING QUICK CONTACT BAR (DESKTOP) -->
+  <aside class="fixed bottom-6 right-6 z-40 hidden md:flex items-center gap-2" aria-label="Quick contact buttons">
+    <a class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow-xl transition-all hover:scale-105 font-mono" href="https://wa.me/919210721868" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
+      <span class="material-symbols-outlined text-[18px]">chat</span>
+      <span>WhatsApp</span>
+    </a>
+    <a class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-surface-card hover:bg-surface-elevated text-accent font-semibold text-xs shadow-xl border border-outline-subtle transition-all hover:scale-105 font-mono" href="mailto:lakshaybatra90@gmail.com" title="Send Email">
+      <span class="material-symbols-outlined text-[18px]">mail</span>
+      <span>Email</span>
+    </a>
+    <a class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary hover:bg-primary-hover text-white font-semibold text-xs shadow-xl transition-all hover:scale-105 font-mono" href="tel:+919210721868" title="Call Technician">
+      <span class="material-symbols-outlined text-[18px]">call</span>
+      <span>+91 92107 21868</span>
+    </a>
+    <button class="open-modal-trigger flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-surface-elevated hover:bg-surface-container text-white font-semibold text-xs shadow-xl border border-outline-subtle transition-all hover:scale-105 cursor-pointer font-mono" type="button">
+      <span class="material-symbols-outlined text-[18px] text-accent">bolt</span>
+      <span>Quick Book</span>
+    </button>
+  </aside>
+
+  <!-- FLOATING QUICK CONTACT BAR (MOBILE DOCK) -->
+  <nav aria-label="Mobile quick actions" class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-surface-card/95 backdrop-blur-md border-t border-outline-subtle p-2 flex items-center justify-between gap-1.5 shadow-2xl">
+    <a class="flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 py-2 rounded-xl bg-emerald-600 text-white font-semibold text-[11px]" href="https://wa.me/919210721868" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined text-[18px]">chat</span>
+      <span>WhatsApp</span>
+    </a>
+    <a class="flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 py-2 rounded-xl bg-surface-elevated text-accent border border-outline-subtle font-semibold text-[11px]" href="mailto:lakshaybatra90@gmail.com">
+      <span class="material-symbols-outlined text-[18px]">mail</span>
+      <span>Email</span>
+    </a>
+    <a class="flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 py-2 rounded-xl bg-primary text-white font-semibold text-[11px]" href="tel:+919210721868">
+      <span class="material-symbols-outlined text-[18px]">call</span>
+      <span>Call</span>
+    </a>
+    <button class="open-modal-trigger flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 py-2 rounded-xl bg-surface-subtle text-on-surface font-semibold text-[11px] border border-outline-subtle cursor-pointer" type="button">
+      <span class="material-symbols-outlined text-[18px] text-accent">calendar_today</span>
+      <span>Book</span>
+    </button>
+  </nav>
+
+  <!-- CLEAN FRIENDLY FOOTER -->
+  <footer class="bg-surface-base border-t border-outline-subtle/80 pt-16 pb-24 md:pb-12 text-sm text-on-surface-variant">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Col 1: Brand (Screen 4 SVG Logo) -->
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-3">
+            <img alt="Lakshay Computer Care Logo" class="h-8 w-auto object-contain" src="assets/logo.svg"/>
+          </div>
+          <p class="text-xs leading-relaxed">
+            East Delhi's trusted doorstep computer repair service. Honest diagnosis, upfront pricing, and certified engineers at your convenience.
+          </p>
+          <div class="flex items-center gap-2 text-xs text-status-healthy font-mono">
+            <span class="material-symbols-outlined text-[16px]">verified</span>
+            <span>Registered &amp; Verified Service Partner</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Services -->
+        <div class="flex flex-col gap-3">
+          <span class="text-xs font-semibold text-white uppercase tracking-wider font-mono">Services</span>
+          <div class="flex flex-col gap-2 text-xs">
+            <a class="hover:text-white transition-colors" href="#services">Laptop &amp; MacBook Screen Replacement</a>
+            <a class="hover:text-white transition-colors" href="#services">Motherboard &amp; Power Circuit Repair</a>
+            <a class="hover:text-white transition-colors" href="#services">CCTV Camera Installation &amp; Setup</a>
+            <a class="hover:text-white transition-colors" href="#services">Cleanroom Hard Drive Data Recovery</a>
+            <a class="hover:text-white transition-colors" href="#services">Certified Refurbished Laptops</a>
+          </div>
+        </div>
+
+        <!-- Col 3: Service Areas -->
+        <div class="flex flex-col gap-3">
+          <span class="text-xs font-semibold text-white uppercase tracking-wider font-mono">Service Areas</span>
+          <p class="text-xs leading-relaxed">
+            East Delhi (Laxmi Nagar, Preet Vihar, Mayur Vihar Phase 1–3, Nirman Vihar, IP Extension, Patparganj, Anand Vihar &amp; Krishna Nagar).
+          </p>
+          <div class="text-xs text-primary-light font-medium font-mono">Doorstep service guaranteed in 45–60 mins.</div>
+        </div>
+
+        <!-- Col 4: Direct Contact & Store Info -->
+        <div class="flex flex-col gap-3">
+          <span class="text-xs font-semibold text-white uppercase tracking-wider font-mono">Contact &amp; Store Location</span>
+          
+          <div class="flex flex-col gap-1">
+            <a class="text-base font-bold text-white hover:text-primary-light transition-colors font-mono flex items-center gap-1.5" href="tel:+919210721868">
+              <span class="material-symbols-outlined text-[18px] text-primary">call</span>
+              <span>+91 92107 21868</span>
+            </a>
+            <span class="text-[11px] text-on-surface-variant font-mono">Secondary Line: +91 85921 62820</span>
+          </div>
+
+          <div class="flex flex-col gap-1.5 pt-1">
+            <a class="inline-flex items-center gap-1.5 text-xs text-status-healthy hover:text-white font-mono transition-colors" href="https://wa.me/919210721868" target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined text-[16px]">chat</span>
+              <span>WhatsApp Direct (+91 92107 21868)</span>
+            </a>
+            <a class="inline-flex items-center gap-1.5 text-xs text-accent hover:text-white font-mono transition-colors" href="mailto:lakshaybatra90@gmail.com">
+              <span class="material-symbols-outlined text-[16px]">mail</span>
+              <span>lakshaybatra90@gmail.com</span>
+            </a>
+          </div>
+
+          <div class="pt-2 border-t border-outline-subtle flex flex-col gap-1 text-xs">
+            <span class="text-white font-medium flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px] text-accent">storefront</span>
+              Patparganj Service Center:
+            </span>
+            <span class="text-on-surface-variant text-[11px] leading-relaxed">
+              Savarkar Apartments, 39, I.P. Extension, Patparganj, East Delhi - 110092 (Near AVB Public School)
+            </span>
+            <div class="pt-1 flex items-center gap-2">
+              <a href="https://maps.google.com/?q=Savarkar+Apartments,+39,+I.P.Extension,+Patparganj,+Delhi,+110092" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] text-accent hover:text-white font-mono transition-colors">
+                <span class="material-symbols-outlined text-[14px]">directions</span>
+                <span>Open in Google Maps</span>
+              </a>
+            </div>
+            <span class="text-[10px] font-mono text-status-healthy mt-0.5">
+              Store: Mon–Sun 9 AM–5 PM · Doorstep: 8 AM–10 PM
+            </span>
+          </div>
+
+          <!-- Accepted Payment Methods Badge Row -->
+          <div class="pt-2 flex flex-col gap-1.5">
+            <span class="text-[10px] uppercase font-mono text-outline">Accepted Payments:</span>
+            <div class="flex items-center gap-1.5 flex-wrap text-[10px] font-mono text-on-surface-variant">
+              <span class="px-1.5 py-0.5 rounded bg-surface-card border border-outline-subtle">UPI / GPay</span>
+              <span class="px-1.5 py-0.5 rounded bg-surface-card border border-outline-subtle">Cards</span>
+              <span class="px-1.5 py-0.5 rounded bg-surface-card border border-outline-subtle">NetBanking</span>
+              <span class="px-1.5 py-0.5 rounded bg-surface-card border border-outline-subtle">Cash</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-outline-subtle/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <span>© 2024 Lakshay Computer Care. Precision Engineering &amp; IT Diagnostics. All rights reserved.</span>
+        <div class="flex items-center gap-5 sm:gap-6 flex-wrap">
+          <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+          <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+          <a class="hover:text-white transition-colors" href="#">Warranty Terms</a>
+          <a class="text-accent hover:text-white transition-colors flex items-center gap-1 font-mono font-medium" href="admin.html" target="_blank" title="Client Management Portal">
+            <span class="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+            <span>Admin Portal</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- SCREEN 3: HIGH-PRECISION DIAGNOSTIC & DOORSTEP BOOKING MODAL TERMINAL -->
+ <!-- EASY & USER-FRIENDLY DOORSTEP ENQUIRY & BOOKING MODAL -->
+  <!-- EASY & USER-FRIENDLY DOORSTEP ENQUIRY & BOOKING MODAL -->
+  <div id="booking-modal" class="modal-backdrop hidden-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-surface-base/85 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+    
+    <!-- Modal Dialog Window -->
+    <div class="modal-panel relative w-full max-w-[640px] my-auto bg-surface-subtle rounded-2xl shadow-2xl shadow-black/90 border border-outline-subtle overflow-hidden flex flex-col">
+      
+      <!-- Top Radiant Accent Gradient Line -->
+      <div class="w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400"></div>
+
+      <!-- Modal Header -->
+      <div class="px-5 sm:px-6 py-4 bg-surface-card border-b border-outline-subtle/80 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary-light shrink-0">
+            <span class="material-symbols-outlined text-[22px]">home_repair_service</span>
+          </div>
+          <div>
+            <h3 id="modal-headline" class="font-headline font-bold text-lg sm:text-xl text-white">Book Doorstep Service or Enquiry</h3>
+            <p class="text-xs text-on-surface-variant">Doorstep pickup & on-site service available anywhere &bull; 15-min callback</p>
+          </div>
+        </div>
+        <button id="close-modal-btn" aria-label="Close" class="w-8 h-8 rounded-lg bg-surface-subtle hover:bg-surface-elevated flex items-center justify-center text-on-surface-variant hover:text-white transition-colors cursor-pointer" type="button">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- View 1: Booking & Enquiry Form -->
+      <div id="modal-form-view" class="p-5 sm:p-6 flex flex-col gap-4">
+        
+        <!-- Pre-selected service/product notification pill -->
+        <div id="modal-selected-service-pill" class="hidden px-3.5 py-2 rounded-xl bg-accent/10 border border-accent/25 flex items-center justify-between text-xs">
+          <span class="text-accent font-medium flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">info</span>
+            <span id="modal-selected-service-text">Inquiry for: Laptop Repair</span>
+          </span>
+          <button type="button" id="clear-selected-service-btn" class="text-on-surface-variant hover:text-white underline text-[11px] cursor-pointer">Clear</button>
+        </div>
+
+        <form id="simple-enquiry-form" class="flex flex-col gap-4">
+          <!-- Row 1: Name & Phone Number -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div class="flex flex-col gap-1.5">
+              <label for="enquiry-name" class="text-xs font-semibold text-white flex items-center gap-1">
+                <span>Your Name</span>
+                <span class="text-accent">*</span>
+              </label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-on-surface-variant">person</span>
+                <input type="text" id="enquiry-name" required placeholder="e.g. Rahul Sharma" class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"/>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="enquiry-phone" class="text-xs font-semibold text-white flex items-center gap-1">
+                <span>Phone Number</span>
+                <span class="text-accent">*</span>
+              </label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-on-surface-variant">call</span>
+                <input type="tel" id="enquiry-phone" required placeholder="e.g. 9210721868" pattern="[0-9]{10}" class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Location / Area (Open & Unbounded with quick suggestion chips) -->
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label for="enquiry-area" class="text-xs font-semibold text-white flex items-center gap-1">
+                <span>Locality / Area</span>
+                <span class="text-accent">*</span>
+              </label>
+              <span class="text-[11px] font-mono text-status-healthy">Service Available Everywhere</span>
+            </div>
+            
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-on-surface-variant">near_me</span>
+              <input type="text" id="enquiry-area" required placeholder="Enter your area (e.g. Laxmi Nagar, Preet Vihar, Mayur Vihar, Rohini, Noida, etc.)" class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"/>
+            </div>
+
+            <!-- Helpful One-Click Suggestion Chips (Not bounded, just quick suggestions) -->
+            <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
+              <span class="text-[11px] text-on-surface-variant font-mono">Popular:</span>
+              <button type="button" class="area-chip px-2 py-0.5 rounded-md text-[11px] font-mono bg-surface-card hover:bg-surface-elevated border border-outline-subtle text-on-surface-variant hover:text-white transition-all">Laxmi Nagar</button>
+              <button type="button" class="area-chip px-2 py-0.5 rounded-md text-[11px] font-mono bg-surface-card hover:bg-surface-elevated border border-outline-subtle text-on-surface-variant hover:text-white transition-all">Preet Vihar</button>
+              <button type="button" class="area-chip px-2 py-0.5 rounded-md text-[11px] font-mono bg-surface-card hover:bg-surface-elevated border border-outline-subtle text-on-surface-variant hover:text-white transition-all">Mayur Vihar</button>
+              <button type="button" class="area-chip px-2 py-0.5 rounded-md text-[11px] font-mono bg-surface-card hover:bg-surface-elevated border border-outline-subtle text-on-surface-variant hover:text-white transition-all">Patparganj / IP Extn</button>
+              <button type="button" class="area-chip px-2 py-0.5 rounded-md text-[11px] font-mono bg-surface-card hover:bg-surface-elevated border border-outline-subtle text-on-surface-variant hover:text-white transition-all">Anand Vihar</button>
+              <button type="button" class="area-chip px-2 py-0.5 rounded-md text-[11px] font-mono bg-surface-card hover:bg-surface-elevated border border-outline-subtle text-on-surface-variant hover:text-white transition-all">Nirman Vihar</button>
+            </div>
+          </div>
+
+          <!-- Row 3: Complete Address -->
+          <div class="flex flex-col gap-1.5">
+            <label for="enquiry-address" class="text-xs font-semibold text-white flex items-center gap-1">
+              <span>Full Address (House / Flat No., Building, Landmark)</span>
+              <span class="text-accent">*</span>
+            </label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-on-surface-variant">home_pin</span>
+              <input type="text" id="enquiry-address" required placeholder="e.g. Flat 302, Tower B, Near Metro Station" class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"/>
+            </div>
+          </div>
+
+          <!-- Row 4: Reason for Enquiry -->
+          <div class="flex flex-col gap-1.5">
+            <label for="enquiry-reason" class="text-xs font-semibold text-white flex items-center gap-1">
+              <span>Reason for Enquiry</span>
+              <span class="text-accent">*</span>
+            </label>
+            <div class="relative">
+              <select id="enquiry-reason" required class="w-full px-3 py-2.5 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+                <option value="Laptop Repair (Screen / Keyboard / Battery / Hinges)" selected>Laptop Repair (Screen / Keyboard / Battery / Hinges)</option>
+                <option value="Laptop Not Turning On / Power & Motherboard Issue">Laptop Not Turning On / Power & Motherboard Issue</option>
+                <option value="Second Hand Laptop Inquiry / Purchase">Second Hand Laptop Inquiry / Purchase</option>
+                <option value="Desktop / Gaming PC Repair & Assembly">Desktop / Gaming PC Repair & Assembly</option>
+                <option value="SSD Speed Upgrade & RAM Expansion">SSD Speed Upgrade & RAM Expansion</option>
+                <option value="Windows / Mac OS Installation & Virus Cleanup">Windows / Mac OS Installation & Virus Cleanup</option>
+                <option value="Data Recovery (Hard Drive / SSD / Pendrive)">Data Recovery (Hard Drive / SSD / Pendrive)</option>
+                <option value="CCTV Camera Setup & Security Maintenance">CCTV Camera Setup & Security Maintenance</option>
+                <option value="General Technical Consultation">General Technical Consultation</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 5: Problem Description -->
+          <div class="flex flex-col gap-1.5">
+            <label for="enquiry-description" class="text-xs font-semibold text-white flex items-center justify-between">
+              <span>Problem Description</span>
+              <span class="text-[11px] text-on-surface-variant font-normal">Details help us bring the right spare parts</span>
+            </label>
+            <textarea id="enquiry-description" rows="2" placeholder="Briefly describe what happened (e.g. laptop shut down abruptly, liquid spilled on keyboard, screen has blue lines, etc.)" class="w-full p-3 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-none transition-all"></textarea>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+            <button type="submit" id="submit-enquiry-btn" class="w-full sm:flex-1 py-3 px-5 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/25 transition-all cursor-pointer">
+              <span class="material-symbols-outlined text-[18px]">verified</span>
+              <span>Confirm Doorstep Booking</span>
+            </button>
+            <a id="whatsapp-quick-submit-btn" href="#" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-600/20">
+              <span class="material-symbols-outlined text-[18px]">chat</span>
+              <span>Send via WhatsApp</span>
+            </a>
+          </div>
+
+          <!-- Fast Assistance Note -->
+          <div class="pt-1 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+            <span class="flex items-center gap-1 text-status-healthy">
+              <span class="material-symbols-outlined text-[14px]">shield</span>
+              No Fix, No Fee Guarantee &bull; 90-Day Warranty
+            </span>
+            <span>Direct Call: <a href="tel:+919210721868" class="text-accent hover:underline font-semibold">+91 92107 21868</a></span>
+          </div>
+        </form>
+      </div>
+
+      <!-- View 2: Friendly Booking Confirmation -->
+      <div id="modal-success-view" class="hidden p-6 sm:p-8 flex flex-col items-center text-center gap-4">
+        <div class="w-16 h-16 rounded-full bg-status-healthy/20 text-status-healthy flex items-center justify-center ring-8 ring-status-healthy/10">
+          <span class="material-symbols-outlined text-[36px]">check_circle</span>
+        </div>
+        
+        <div class="flex flex-col gap-1">
+          <span class="inline-block px-3 py-1 rounded-full bg-surface-card border border-outline-subtle text-accent font-mono text-xs w-fit mx-auto" id="confirmed-ticket">
+            #LCC-5082
+          </span>
+          <h4 class="font-headline font-bold text-xl sm:text-2xl text-white mt-1">Booking Confirmed!</h4>
+          <p class="text-xs sm:text-sm text-on-surface-variant max-w-md mx-auto">
+            Our certified technician is assigned to your location. We will call you within 15 minutes to confirm the exact arrival time.
+          </p>
+        </div>
+
+        <div class="w-full p-4 rounded-xl bg-surface-base border border-outline-subtle text-left text-xs flex flex-col gap-2">
+          <div class="flex justify-between border-b border-outline-subtle/60 pb-1.5">
+            <span class="text-on-surface-variant">Customer:</span>
+            <span class="text-white font-semibold" id="confirmed-name">Rahul Sharma</span>
+          </div>
+          <div class="flex justify-between border-b border-outline-subtle/60 pb-1.5">
+            <span class="text-on-surface-variant">Phone:</span>
+            <span class="text-white font-semibold" id="confirmed-phone">9210721868</span>
+          </div>
+          <div class="flex justify-between border-b border-outline-subtle/60 pb-1.5">
+            <span class="text-on-surface-variant">Area & Address:</span>
+            <span class="text-white font-semibold text-right" id="confirmed-address">Laxmi Nagar</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-on-surface-variant">Service:</span>
+            <span class="text-accent font-medium text-right" id="confirmed-reason">Laptop Repair</span>
+          </div>
+        </div>
+
+        <div class="w-full flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <a id="confirmed-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="w-full sm:flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all">
+            <span class="material-symbols-outlined text-[18px]">chat</span>
+            <span>Chat on WhatsApp</span>
+          </a>
+          <button type="button" id="confirmed-done-btn" class="w-full sm:w-auto py-3 px-6 rounded-xl bg-surface-card hover:bg-surface-elevated text-white border border-outline-subtle text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+            Close Window
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>-full bg-accent animate-ping"></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INTERACTIVE FUNCTIONALITY SCRIPT -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- MODAL ELEMENTS ---
+      const modal = document.getElementById('booking-modal');
+      const closeModalBtn = document.getElementById('close-modal-btn');
+      const openModalTriggers = document.querySelectorAll('.open-modal-trigger');
+      
+      const modalWorkflowView = document.getElementById('modal-workflow-view');
+      const modalSuccessView = document.getElementById('modal-success-view');
+      
+      const modalDeviceTag = document.getElementById('modal-device-tag');
+      const modalFaultTag = document.getElementById('modal-fault-tag');
+      const modalCodeTag = document.getElementById('modal-code-tag');
+      const modalChangeDeviceBtn = document.getElementById('modal-change-device-btn');
+      
+      const breakdownServiceName = document.getElementById('breakdown-service-name');
+      const breakdownServicePrice = document.getElementById('breakdown-service-price');
+      const breakdownVelocityBadge = document.getElementById('breakdown-velocity-badge');
+      const breakdownVelocityPrice = document.getElementById('breakdown-velocity-price');
+      const totalPayableNow = document.getElementById('total-payable-now');
+      const lockSlotBtn = document.getElementById('lock-slot-btn');
+      
+      const inputAddress = document.getElementById('input-address');
+      const inputInstructions = document.getElementById('input-instructions');
+      const inputPhone = document.getElementById('input-phone');
+      const terminalLocLock = document.getElementById('terminal-loc-lock');
+      
+      let currentSurcharge = 299;
+      let currentFaultTitle = "Laptop Won't Turn On";
+      let currentFaultCode = "ERR_PWR_01";
+      let currentFaultPrice = "From ₹499";
+
+      // --- OPEN / CLOSE MODAL HELPERS ---
+      function openModal(prefillData = null) {
+        if (prefillData) {
+          currentFaultTitle = prefillData.title || currentFaultTitle;
+          currentFaultCode = prefillData.code || currentFaultCode;
+          currentFaultPrice = prefillData.price || currentFaultPrice;
+          
+          if (modalFaultTag) modalFaultTag.textContent = currentFaultTitle;
+          if (modalCodeTag) modalCodeTag.textContent = currentFaultCode;
+          if (breakdownServiceName) breakdownServiceName.textContent = currentFaultTitle;
+          if (breakdownServicePrice) breakdownServicePrice.textContent = currentFaultPrice;
+        }
+        
+        // Reset to workflow view
+        if (modalWorkflowView) modalWorkflowView.classList.remove('hidden');
+        if (modalSuccessView) modalSuccessView.classList.add('hidden');
+        
+        modal.classList.remove('hidden-modal');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.classList.add('hidden-modal');
+        document.body.style.overflow = '';
+      }
+
+      openModalTriggers.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openModal();
+        });
+      });
+
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+      }
+
+      // Close on backdrop click
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden-modal')) {
+          closeModal();
+        }
+      });
+
+      if (modalChangeDeviceBtn) {
+        modalChangeDeviceBtn.addEventListener('click', () => {
+          closeModal();
+          const triageSec = document.getElementById('triage');
+          if (triageSec) triageSec.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+
+      // --- TRIAGE SECTION INTERACTIVITY ---
+      const symptomCards = document.querySelectorAll('.symptom-card');
+      const estTitle = document.getElementById('est-title');
+      const estDesc = document.getElementById('est-desc');
+      const estPrice = document.getElementById('est-price');
+      const estTime = document.getElementById('est-time');
+      const estIncludes = document.getElementById('est-includes');
+      const estWarranty = document.getElementById('est-warranty');
+      const estBookBtn = document.getElementById('est-book-btn');
+
+      symptomCards.forEach(card => {
+        card.addEventListener('click', function() {
+          symptomCards.forEach(c => {
+            c.classList.remove('border-primary/50', 'ring-1', 'ring-primary/40');
+            c.classList.add('border-outline-subtle');
+          });
+
+          this.classList.remove('border-outline-subtle');
+          this.classList.add('border-primary/50', 'ring-1', 'ring-primary/40');
+
+          const title = this.getAttribute('data-title');
+          const code = this.getAttribute('data-code');
+          const desc = this.getAttribute('data-desc');
+          const price = this.getAttribute('data-price');
+          const time = this.getAttribute('data-time');
+          const includes = this.getAttribute('data-includes');
+          const warranty = this.getAttribute('data-warranty');
+
+          if (estTitle) estTitle.textContent = title;
+          if (estDesc) estDesc.textContent = desc;
+          if (estPrice) estPrice.textContent = price;
+          if (estTime) estTime.textContent = time;
+          if (estIncludes) estIncludes.textContent = includes;
+          if (estWarranty) estWarranty.textContent = warranty;
+
+          currentFaultTitle = title;
+          currentFaultCode = code;
+          currentFaultPrice = price;
+        });
+      });
+
+      if (estBookBtn) {
+        estBookBtn.addEventListener('click', () => {
+          openModal({
+            title: currentFaultTitle,
+            code: currentFaultCode,
+            price: currentFaultPrice
+          });
+        });
+      }
+
+      // --- MODAL SYMPTOM BUTTONS ---
+      const modalSymptomBtns = document.querySelectorAll('.modal-symptom-btn');
+      modalSymptomBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          modalSymptomBtns.forEach(b => {
+            b.classList.remove('bg-primary/20', 'border-primary/50', 'ring-1', 'ring-primary/40');
+            b.classList.add('bg-surface-card', 'border-outline-subtle');
+            const icon = b.querySelector('.material-symbols-outlined');
+            if (icon) {
+              icon.textContent = 'radio_button_unchecked';
+              icon.classList.remove('text-accent');
+              icon.classList.add('text-outline');
+            }
+          });
+          btn.classList.remove('bg-surface-card', 'border-outline-subtle');
+          btn.classList.add('bg-primary/20', 'border-primary/50', 'ring-1', 'ring-primary/40');
+          const icon = btn.querySelector('.material-symbols-outlined');
+          if (icon) {
+            icon.textContent = 'radio_button_checked';
+            icon.classList.remove('text-outline');
+            icon.classList.add('text-accent');
+          }
+        });
+      });
+
+      // --- MICRO-MARKET PILLS ---
+      const marketPills = document.querySelectorAll('.market-pill');
+      marketPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          marketPills.forEach(p => {
+            p.classList.remove('bg-primary', 'text-white');
+            p.classList.add('bg-surface-card', 'text-on-surface-variant', 'border', 'border-outline-subtle');
+          });
+          pill.classList.remove('bg-surface-card', 'text-on-surface-variant', 'border', 'border-outline-subtle');
+          pill.classList.add('bg-primary', 'text-white');
+
+          const area = pill.getAttribute('data-area');
+          if (inputAddress) {
+            inputAddress.value = `${area}, Sector Hub`;
+          }
+          if (terminalLocLock) {
+            terminalLocLock.textContent = `LOCATION_LOCK: ${area.toUpperCase().replace(/[^A-Z0-9]/g, '_')}`;
+          }
+        });
+      });
+
+      // --- DISPATCH VELOCITY TIERS ---
+      const dispatchCards = document.querySelectorAll('.dispatch-card');
+      function updateFinancialTotal() {
+        if (breakdownVelocityPrice) {
+          breakdownVelocityPrice.textContent = currentSurcharge > 0 ? `₹${currentSurcharge}` : 'FREE';
+        }
+        if (totalPayableNow) {
+          totalPayableNow.textContent = currentSurcharge > 0 ? `₹${currentSurcharge}` : '₹0';
+        }
+      }
+
+      dispatchCards.forEach(card => {
+        card.addEventListener('click', () => {
+          dispatchCards.forEach(c => {
+            c.classList.remove('border-accent', 'ring-1', 'ring-accent/60', 'bg-surface-elevated');
+            c.classList.add('border-outline-subtle', 'bg-surface-card');
+          });
+
+          card.classList.remove('border-outline-subtle', 'bg-surface-card');
+          card.classList.add('border-accent', 'ring-1', 'ring-accent/60', 'bg-surface-elevated');
+
+          currentSurcharge = parseInt(card.getAttribute('data-fee'), 10) || 0;
+          const name = card.getAttribute('data-name');
+          if (breakdownVelocityBadge) breakdownVelocityBadge.textContent = name.split(' ')[0];
+          updateFinancialTotal();
+        });
+      });
+
+      // --- LOCK SLOT / CONFIRMATION TRIGGER ---
+      if (lockSlotBtn) {
+        lockSlotBtn.addEventListener('click', () => {
+          // Transition to Step 4 confirmation view
+          const randTicket = '#LCC-' + Math.floor(1000 + Math.random() * 9000);
+          const confirmedTicket = document.getElementById('confirmed-ticket');
+          const confirmedAddress = document.getElementById('confirmed-address');
+          const confirmedWhatsappBtn = document.getElementById('confirmed-whatsapp-btn');
+
+          if (confirmedTicket) confirmedTicket.textContent = randTicket;
+          if (confirmedAddress && inputAddress) {
+            confirmedAddress.textContent = inputAddress.value || 'East Delhi Doorstep';
+          }
+
+          if (confirmedWhatsappBtn) {
+            const encodedMsg = encodeURIComponent(`Hi Lakshay Computer Care, I just booked doorstep dispatch ${randTicket} for ${currentFaultTitle}. Address: ${inputAddress ? inputAddress.value : ''}`);
+            confirmedWhatsappBtn.href = `https://wa.me/919210721868?text=${encodedMsg}`;
+          }
+
+          // Step header updates
+          const step1Label = document.getElementById('step1-label');
+          const step2Label = document.getElementById('step2-label');
+          const step2Status = document.getElementById('step2-status');
+          const step3Group = document.getElementById('step3-group');
+          const step4Group = document.getElementById('step4-group');
+          const step3Bar = document.getElementById('step3-bar');
+          const step4Bar = document.getElementById('step4-bar');
+
+          if (step2Status) step2Status.textContent = 'DONE';
+          if (step3Group) step3Group.classList.remove('opacity-60');
+          if (step3Bar) step3Bar.classList.add('bg-accent');
+          if (step4Group) step4Group.classList.remove('opacity-40');
+          if (step4Bar) step4Bar.classList.add('bg-status-healthy');
+
+          modalWorkflowView.classList.add('hidden');
+          modalSuccessView.classList.remove('hidden');
+        });
+      }
+
+      const confirmedDoneBtn = document.getElementById('confirmed-done-btn');
+      if (confirmedDoneBtn) {
+        confirmedDoneBtn.addEventListener('click', closeModal);
+      }
+
+      // --- PRODUCT CATEGORY FILTER LOGIC ---
+      const filterBtns = document.querySelectorAll('.product-filter-btn');
+      const productItems = document.querySelectorAll('.product-item');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-primary', 'text-white');
+            b.classList.add('bg-surface-card', 'text-on-surface-variant', 'border', 'border-outline-subtle');
+          });
+          btn.classList.remove('bg-surface-card', 'text-on-surface-variant', 'border', 'border-outline-subtle');
+          btn.classList.add('bg-primary', 'text-white');
+
+          const filter = btn.getAttribute('data-filter');
+          productItems.forEach(item => {
+            if (filter === 'all' || item.classList.contains(filter)) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Allow product "Book Demo" buttons to launch modal with product name
+      document.querySelectorAll('#product-grid .open-modal-trigger').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const pTitle = btn.getAttribute('data-product-title') || 'Certified Second Hand Laptop';
+          const pPrice = btn.getAttribute('data-product-price') || 'From ₹13,499';
+          openModal({
+            title: `Demo / Purchase: ${pTitle}`,
+            code: 'PRE_OWNED_DEMO',
+            price: pPrice
+          });
+        });
+      });
+
+    });
+  </script>
+</body>
+</html>
