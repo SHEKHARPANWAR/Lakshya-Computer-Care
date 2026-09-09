@@ -80,13 +80,12 @@
         <div class="flex flex-col gap-1.5">
           <label for="admin-passcode" class="text-xs font-semibold text-white flex items-center justify-between">
             <span>Admin Passcode</span>
-            <span class="text-[11px] text-accent font-mono">Default: 9210</span>
           </label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-on-surface-variant">lock</span>
-            <input type="password" id="admin-passcode" required autofocus placeholder="Enter 4-digit code" class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"/>
+            <input type="password" id="admin-passcode" required autofocus placeholder="Enter passcode" class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-surface-base border border-outline-subtle text-white placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"/>
           </div>
-          <p id="auth-error" class="hidden text-xs text-status-critical font-medium">Incorrect passcode. Try default (9210).</p>
+          <p id="auth-error" class="hidden text-xs text-status-critical font-medium">Incorrect passcode. Please try again.</p>
         </div>
 
         <button type="submit" class="w-full py-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-sm shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 cursor-pointer">
@@ -373,7 +372,7 @@
       const AUTH_KEY = 'lcc_admin_authed';
       const ENQUIRIES_KEY = 'lcc_customer_enquiries';
       const PRODUCTS_KEY = 'lcc_custom_products';
-      const CORRECT_PASSCODE = '9210';
+      const CORRECT_PASSCODE = 'LCC9210';
 
       // Elements
       const authScreen = document.getElementById('auth-screen');
