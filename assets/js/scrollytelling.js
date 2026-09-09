@@ -207,14 +207,13 @@
 
           const title = card.getAttribute('data-title');
           const desc = card.getAttribute('data-desc');
-          const price = card.getAttribute('data-price');
           const time = card.getAttribute('data-time');
           const includes = card.getAttribute('data-includes');
           const warranty = card.getAttribute('data-warranty');
 
           if (this.estTitle) this.estTitle.textContent = title;
           if (this.estDesc) this.estDesc.textContent = desc;
-          if (this.estPrice) this.estPrice.textContent = price;
+          if (this.estPrice) this.estPrice.textContent = '';
           if (this.estTime) this.estTime.textContent = time;
           if (this.estIncludes) this.estIncludes.textContent = includes;
           if (this.estWarranty) this.estWarranty.textContent = warranty;
@@ -227,7 +226,7 @@
           window.openBookingModal({
             title: currentTitle,
             reason: currentTitle,
-            desc: `Selected service: ${currentTitle} (${this.estPrice ? this.estPrice.textContent : ''})`,
+            desc: `Selected service: ${currentTitle}`,
           });
         });
       }
@@ -301,9 +300,6 @@
           category: 'Ultrabook',
           condition: 'Grade A+ Clean · 100% Tested',
           specs: 'Core i3-1115G4 · 8GB DDR4 RAM · 512GB NVMe SSD · 15.6" Full HD Anti-Glare',
-          startingPrice: '₹21,999',
-          originalMrp: '₹44,990',
-          discount: '51% OFF',
           warranty: '6 Months Onsite Warranty',
           image_file: 'dell-vostro-3520.jpg',
           badge: 'Popular',
@@ -314,9 +310,6 @@
           category: 'Gaming',
           condition: 'Open Box Like-New · 100% Battery Health',
           specs: 'Intel Core i7-14650HX · 16GB DDR5 · 1TB Gen4 SSD · RTX 4060 8GB GDDR6 · 165Hz Display',
-          startingPrice: '₹68,999',
-          originalMrp: '₹1,24,990',
-          discount: '45% OFF',
           warranty: '1 Year Full Warranty',
           image_file: 'asus-rog-strix-g16.jpg',
           badge: 'Gaming',
@@ -327,9 +320,6 @@
           category: 'Gaming',
           condition: 'Grade A+ Clean · Certified Stress-Tested',
           specs: 'Intel Core i5-12500H · 16GB RAM · 512GB NVMe · RTX 3050 4GB · 120Hz Screen',
-          startingPrice: '₹44,999',
-          originalMrp: '₹79,990',
-          discount: '44% OFF',
           warranty: '6 Months Warranty',
           image_file: 'dell-g15-gaming.jpg',
           badge: 'High Value',
@@ -340,9 +330,6 @@
           category: 'Ultrabook',
           condition: 'Open Box Mint · 0 Cycle Count',
           specs: 'Intel Core i7-13700H · 16GB RAM · 1TB NVMe · 16" 2.5K 16:10 Display · Thunderbolt 4',
-          startingPrice: '₹52,999',
-          originalMrp: '₹98,990',
-          discount: '46% OFF',
           warranty: '6 Months Warranty',
           image_file: 'dell-inspiron-16-plus.png',
           badge: 'Creator Choice',
@@ -353,9 +340,6 @@
           category: 'Touch',
           condition: 'Grade A+ Clean · Stylus Pen Supported',
           specs: 'Core i5-1135G7 · 8GB RAM · 512GB SSD · 14" Full HD Touch 360° Flip · Backlit Keys',
-          startingPrice: '₹24,999',
-          originalMrp: '₹56,990',
-          discount: '56% OFF',
           warranty: '6 Months Warranty',
           image_file: 'dell-inspiron-14-2in1.jpg',
           badge: '2-in-1 Touch',
@@ -366,9 +350,6 @@
           category: 'Accessories',
           condition: 'Brand New Sealed Box',
           specs: 'Spill-Resistant Membrane Keys · 10M Keystroke Life · Braided Copper USB Cable',
-          startingPrice: '₹399',
-          originalMrp: '₹799',
-          discount: '50% OFF',
           warranty: '1 Year Brand Replacement',
           image_file: 'lapcare-keyboard.jpg',
           badge: 'Accessory',
@@ -379,9 +360,6 @@
           category: 'Accessories',
           condition: 'Brand New Sealed Box',
           specs: '1200 DPI Optical Sensor · Ambidextrous Comfort Grip · Smooth Teflon Gliders',
-          startingPrice: '₹199',
-          originalMrp: '₹449',
-          discount: '56% OFF',
           warranty: '1 Year Brand Replacement',
           image_file: 'lapcare-mouse.jpg',
           badge: 'Accessory',
@@ -415,7 +393,7 @@
           }
 
           const waText = encodeURIComponent(
-            `Hi Lakshay Computer Care, I am interested in buying ${p.name} for ${p.startingPrice} from your Delhi store. Is it available?`
+            `Hi Lakshay Computer Care, I am interested in ${p.name} from your Delhi store. Is it available?`
           );
 
           return `
@@ -423,13 +401,13 @@
               <div class="card-3d p-3 sm:p-5 group cursor-pointer" data-max-tilt="10">
                 <div class="card-glare"></div>
 
-                <!-- Badge & Discount -->
+                <!-- Badge & Stock Status -->
                 <div class="depth-subtle flex items-center justify-between gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                   <span class="px-2 sm:px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 text-[9px] sm:text-[11px] font-mono font-medium">
-                    ${p.badge || p.category || 'Special'}
+                    ${p.badge || p.category || 'Certified'}
                   </span>
                   <span class="px-1.5 sm:px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 text-[9px] sm:text-[10px] font-mono font-semibold">
-                    ${p.discount || 'Deal'}
+                    In Stock
                   </span>
                 </div>
 
@@ -459,21 +437,14 @@
                     </p>
                   </div>
 
-                  <!-- Price & Actions -->
+                  <!-- Warranty & Actions -->
                   <div class="depth-pop pt-2 sm:pt-3 mt-2 sm:mt-3 border-t border-white/10">
-                    <div class="flex items-baseline justify-between mb-2 sm:mb-3">
-                      <div>
-                        <span class="text-[8px] sm:text-[10px] text-slate-400 font-mono block uppercase">Price</span>
-                        <span class="font-headline font-extrabold text-sm sm:text-xl text-white tracking-tight">${p.startingPrice}</span>
+                    <div class="flex items-center justify-between mb-2 sm:mb-3 text-[10px] sm:text-xs font-mono">
+                      <div class="flex items-center gap-1.5 text-slate-300">
+                        <span class="material-symbols-outlined text-xs sm:text-sm text-cyan-400">verified</span>
+                        <span>${p.warranty || '6 Months Warranty'}</span>
                       </div>
-                      ${
-                        p.originalMrp
-                          ? `<div class="text-right">
-                              <span class="text-[8px] sm:text-[10px] text-slate-500 font-mono block uppercase">MRP</span>
-                              <span class="text-[10px] sm:text-xs text-slate-500 line-through font-mono">${p.originalMrp}</span>
-                            </div>`
-                          : ''
-                      }
+                      <span class="text-emerald-400 font-semibold text-[10px]">Ready Stock</span>
                     </div>
 
                     <div class="depth-cta grid grid-cols-2 gap-1.5 sm:gap-2">
@@ -487,7 +458,7 @@
                       </a>
                       <button 
                         type="button" 
-                        onclick="window.openBookingModal({ title: '${p.name.replace(/'/g, "\\'")}', reason: 'Inquiry: ${p.name.replace(/'/g, "\\'")}', desc: 'Availability inquiry for ${p.name.replace(/'/g, "\\'")} (${p.startingPrice})' })" 
+                        onclick="window.openBookingModal({ title: '${p.name.replace(/'/g, "\\'")}', reason: 'Inquiry: ${p.name.replace(/'/g, "\\'")}', desc: 'Availability inquiry for ${p.name.replace(/'/g, "\\'")}' })" 
                         class="py-1.5 sm:py-2 px-1 sm:px-2.5 rounded-lg sm:rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/10 font-semibold text-[10px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 transition-all whitespace-nowrap"
                       >
                         <span class="material-symbols-outlined text-[12px] sm:text-[15px]">calendar_today</span> Inquire
