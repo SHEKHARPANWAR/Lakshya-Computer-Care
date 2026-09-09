@@ -1,6 +1,6 @@
 /**
  * LAKSHAY COMPUTER CARE - CLEAN SCROLLYTELLING & 3D CARD ENGINE
- * Professional doorstep computer, laptop, and CCTV service in East Delhi
+ * Professional doorstep computer, laptop, and CCTV service in Delhi
  */
 
 (function () {
@@ -401,7 +401,7 @@
       if (filtered.length === 0) {
         this.container.innerHTML = `
           <div class="col-span-full py-12 text-center text-slate-400 font-mono text-xs border border-dashed border-white/10 rounded-2xl">
-            No devices currently matching this category in stock. Contact our Patparganj store via WhatsApp!
+            No devices currently matching this category in stock. Contact our Delhi store via WhatsApp!
           </div>
         `;
         return;
@@ -415,26 +415,26 @@
           }
 
           const waText = encodeURIComponent(
-            `Hi Lakshay Computer Care, I am interested in buying ${p.name} for ${p.startingPrice} from your East Delhi store. Is it available?`
+            `Hi Lakshay Computer Care, I am interested in buying ${p.name} for ${p.startingPrice} from your Delhi store. Is it available?`
           );
 
           return `
             <div class="card-3d-wrap">
-              <div class="card-3d p-5 group cursor-pointer" data-max-tilt="10">
+              <div class="card-3d p-3 sm:p-5 group cursor-pointer" data-max-tilt="10">
                 <div class="card-glare"></div>
 
                 <!-- Badge & Discount -->
-                <div class="depth-subtle flex items-center justify-between gap-2 mb-3">
-                  <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 text-[11px] font-mono font-medium">
+                <div class="depth-subtle flex items-center justify-between gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+                  <span class="px-2 sm:px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 text-[9px] sm:text-[11px] font-mono font-medium">
                     ${p.badge || p.category || 'Special'}
                   </span>
-                  <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 text-[10px] font-mono font-semibold">
+                  <span class="px-1.5 sm:px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 text-[9px] sm:text-[10px] font-mono font-semibold">
                     ${p.discount || 'Deal'}
                   </span>
                 </div>
 
                 <!-- Product Image -->
-                <div class="depth-image relative rounded-xl overflow-hidden bg-slate-950/40 p-4 h-44 flex items-center justify-center border border-white/5 mb-3 group-hover:border-cyan-500/30 transition-colors">
+                <div class="depth-image relative rounded-lg sm:rounded-xl overflow-hidden bg-slate-950/40 p-2 sm:p-4 h-28 sm:h-44 flex items-center justify-center border border-white/5 mb-2 sm:mb-3 group-hover:border-cyan-500/30 transition-colors">
                   <img 
                     src="${imgSrc}" 
                     alt="${p.name}" 
@@ -447,50 +447,50 @@
                 <!-- Product Info -->
                 <div class="depth-subtle flex-1 flex flex-col justify-between">
                   <div>
-                    <div class="flex items-center gap-1.5 text-[11px] text-emerald-400 font-mono mb-1">
-                      <span class="material-symbols-outlined text-[13px]">verified</span>
+                    <div class="flex items-center gap-1 text-[9px] sm:text-[11px] text-emerald-400 font-mono mb-1">
+                      <span class="material-symbols-outlined text-[11px] sm:text-[13px]">verified</span>
                       <span>${p.condition || 'Tested & Certified'}</span>
                     </div>
-                    <h3 class="font-headline font-bold text-white text-base group-hover:text-cyan-300 transition-colors line-clamp-1">
+                    <h3 class="font-headline font-bold text-white text-xs sm:text-base group-hover:text-cyan-300 transition-colors line-clamp-1">
                       ${p.name}
                     </h3>
-                    <p class="text-xs text-slate-400 font-mono mt-1 leading-relaxed line-clamp-2">
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-mono mt-0.5 sm:mt-1 leading-snug sm:leading-relaxed line-clamp-2">
                       ${p.specs}
                     </p>
                   </div>
 
                   <!-- Price & Actions -->
-                  <div class="depth-pop pt-3 mt-3 border-t border-white/10">
-                    <div class="flex items-baseline justify-between mb-3">
+                  <div class="depth-pop pt-2 sm:pt-3 mt-2 sm:mt-3 border-t border-white/10">
+                    <div class="flex items-baseline justify-between mb-2 sm:mb-3">
                       <div>
-                        <span class="text-[10px] text-slate-400 font-mono block uppercase">Price</span>
-                        <span class="font-headline font-extrabold text-xl text-white tracking-tight">${p.startingPrice}</span>
+                        <span class="text-[8px] sm:text-[10px] text-slate-400 font-mono block uppercase">Price</span>
+                        <span class="font-headline font-extrabold text-sm sm:text-xl text-white tracking-tight">${p.startingPrice}</span>
                       </div>
                       ${
                         p.originalMrp
                           ? `<div class="text-right">
-                              <span class="text-[10px] text-slate-500 font-mono block uppercase">MRP</span>
-                              <span class="text-xs text-slate-500 line-through font-mono">${p.originalMrp}</span>
+                              <span class="text-[8px] sm:text-[10px] text-slate-500 font-mono block uppercase">MRP</span>
+                              <span class="text-[10px] sm:text-xs text-slate-500 line-through font-mono">${p.originalMrp}</span>
                             </div>`
                           : ''
                       }
                     </div>
 
-                    <div class="depth-cta grid grid-cols-2 gap-2">
+                    <div class="depth-cta grid grid-cols-2 gap-1.5 sm:gap-2">
                       <a 
                         href="https://wa.me/919210721868?text=${waText}" 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        class="py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
+                        class="py-1.5 sm:py-2 px-1 sm:px-2.5 rounded-lg sm:rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-[10px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 transition-all whitespace-nowrap"
                       >
-                        <span class="material-symbols-outlined text-[15px]">chat</span> WhatsApp
+                        <span class="material-symbols-outlined text-[12px] sm:text-[15px]">chat</span> WhatsApp
                       </a>
                       <button 
                         type="button" 
                         onclick="window.openBookingModal({ title: '${p.name.replace(/'/g, "\\'")}', reason: 'Inquiry: ${p.name.replace(/'/g, "\\'")}', desc: 'Availability inquiry for ${p.name.replace(/'/g, "\\'")} (${p.startingPrice})' })" 
-                        class="py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/10 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
+                        class="py-1.5 sm:py-2 px-1 sm:px-2.5 rounded-lg sm:rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/10 font-semibold text-[10px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 transition-all whitespace-nowrap"
                       >
-                        <span class="material-symbols-outlined text-[15px]">calendar_today</span> Inquire
+                        <span class="material-symbols-outlined text-[12px] sm:text-[15px]">calendar_today</span> Inquire
                       </button>
                     </div>
                   </div>
@@ -647,7 +647,7 @@
       const ticketNo = '#LCC-' + Math.floor(1000 + Math.random() * 9000);
       const name = (this.inputName && this.inputName.value) || 'Customer';
       const phone = (this.inputPhone && this.inputPhone.value) || '9210721868';
-      const area = (this.inputArea && this.inputArea.value) || 'East Delhi';
+      const area = (this.inputArea && this.inputArea.value) || 'Delhi';
       const address = (this.inputAddress && this.inputAddress.value) || area;
       const reason = (this.inputReason && this.inputReason.value) || 'Laptop Repair';
       const desc = (this.inputDesc && this.inputDesc.value) || '';
@@ -703,7 +703,70 @@
     }
   }
 
-  // --- 7. INITIALIZE ---
+  // --- 7. MOBILE HAMBURGER NAVIGATION DRAWER ---
+  class MobileNavManager {
+    constructor() {
+      this.hamburgerBtn = document.getElementById('hamburger-menu-btn');
+      this.closeBtn = document.getElementById('close-mobile-nav');
+      this.backdrop = document.getElementById('mobile-nav-backdrop');
+      this.drawer = document.getElementById('mobile-nav-drawer');
+      this.links = document.querySelectorAll('.drawer-nav-link');
+      this.init();
+    }
+
+    init() {
+      window.openMobileNav = () => this.open();
+      window.closeMobileNav = () => this.close();
+
+      if (this.hamburgerBtn) {
+        this.hamburgerBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.open();
+        });
+      }
+      if (this.closeBtn) {
+        this.closeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.close();
+        });
+      }
+      if (this.backdrop) {
+        this.backdrop.addEventListener('click', () => this.close());
+      }
+
+      this.links.forEach((link) => {
+        link.addEventListener('click', () => {
+          this.close();
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.drawer && !this.drawer.classList.contains('translate-x-full')) {
+          this.close();
+        }
+      });
+    }
+
+    open() {
+      if (!this.drawer || !this.backdrop) return;
+      this.backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      this.backdrop.classList.add('opacity-100', 'pointer-events-auto');
+      this.drawer.classList.remove('translate-x-full');
+      this.drawer.classList.add('translate-x-0');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    close() {
+      if (!this.drawer || !this.backdrop) return;
+      this.backdrop.classList.add('opacity-0', 'pointer-events-none');
+      this.backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      this.drawer.classList.add('translate-x-full');
+      this.drawer.classList.remove('translate-x-0');
+      document.body.classList.remove('overflow-hidden');
+    }
+  }
+
+  // --- 8. INITIALIZE ---
   document.addEventListener('DOMContentLoaded', () => {
     const scrollEngine = new SmoothScrollEngine();
     const tiltEngine = new TiltCardEngine();
@@ -711,5 +774,6 @@
     const triageEstimator = new DiagnosticsEstimator();
     const showroom = new ProductShowroom(tiltEngine);
     const modalManager = new BookingModalManager();
+    const navManager = new MobileNavManager();
   });
 })();

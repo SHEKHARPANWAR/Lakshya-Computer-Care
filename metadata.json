@@ -1,0 +1,8 @@
+{
+  "name": "Lakshay Computer Care",
+  "description": "Professional doorstep computer, laptop & MacBook repair across Delhi. 45-min rapid arrival, honest onsite repairs in front of you, 90-day warranty.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -503,8 +503,8 @@
               date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
               name: 'Vikas Malhotra',
               phone: '9811452309',
-              area: 'Preet Vihar',
-              address: 'House 44, Ground Floor, Block C, Near Metro Gate 2',
+              area: 'Delhi',
+              address: 'House 44, Ground Floor, Block C, Delhi',
               reason: 'Laptop Repair (Screen / Keyboard / Battery / Hinges)',
               description: 'HP Envy screen cracked after fall, display shows half black lines',
               status: 'New'
@@ -514,8 +514,8 @@
               date: new Date(Date.now() - 3600000 * 3).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
               name: 'Pooja Verma',
               phone: '9910842231',
-              area: 'Mayur Vihar Phase 1',
-              address: 'Pocket 4, Flat 102, Near Samachar Apartments',
+              area: 'Delhi',
+              address: 'Pocket 4, Flat 102, Delhi',
               reason: 'Second Hand Laptop Inquiry / Purchase',
               description: 'Inquired about Dell Vostro 3520 (11th Gen) for office accounting work',
               status: 'In Progress'
@@ -654,15 +654,13 @@
       // Add Test Lead
       btnAddMockEnquiry.addEventListener('click', () => {
         const mockTicket = '#LCC-' + Math.floor(1000 + Math.random() * 9000);
-        const areas = ['Laxmi Nagar', 'Nirman Vihar', 'Preet Vihar', 'Patparganj', 'Mayur Vihar Phase 2', 'Anand Vihar'];
-        const randomArea = areas[Math.floor(Math.random() * areas.length)];
         const newLead = {
           id: mockTicket,
           date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-          name: 'Demo Client (' + randomArea + ')',
+          name: 'Demo Client',
           phone: '9210721868',
-          area: randomArea,
-          address: 'Main Market Sector Road, Near Metro Station',
+          area: 'Delhi',
+          address: 'Main Market Sector Road, Near Metro Station, Delhi',
           reason: 'Laptop Repair (Screen / Keyboard / Battery / Hinges)',
           description: 'Testing live sync in isolated admin panel',
           status: 'New'

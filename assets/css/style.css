@@ -192,15 +192,27 @@ body {
 ----------------------------------------------------------- */
 .scrolly-section {
   position: relative;
-  padding: 5rem 1.5rem;
+  padding: 2.5rem 1rem;
   max-width: 1280px;
   margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .scrolly-section {
+    padding: 3.5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .scrolly-section {
+    padding: 5rem 1.5rem;
+  }
 }
 
 .scrolly-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem;
+  gap: 1.5rem;
   align-items: start;
 }
 
@@ -213,9 +225,9 @@ body {
 
 .scrolly-sticky-visual {
   position: sticky;
-  top: 6.5rem;
-  height: 480px;
-  border-radius: 1.5rem;
+  top: 4.5rem;
+  height: 300px;
+  border-radius: 1rem;
   background: var(--bg-surface-1);
   border: 1px solid var(--border-subtle);
   overflow: hidden;
@@ -226,16 +238,40 @@ body {
   perspective: 1000px;
 }
 
+@media (min-width: 640px) {
+  .scrolly-sticky-visual {
+    height: 380px;
+    border-radius: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .scrolly-sticky-visual {
+    top: 6.5rem;
+    height: 480px;
+    border-radius: 1.5rem;
+  }
+}
+
 .scrolly-story-step {
-  padding: 2.25rem;
-  border-radius: 1.25rem;
-  margin-bottom: 2rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  margin-bottom: 1.25rem;
   background: rgba(18, 24, 40, 0.5);
   border: 1px solid var(--border-subtle);
   backdrop-filter: blur(12px);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 0.5;
-  transform: translateY(12px);
+  opacity: 0.6;
+  transform: translateY(8px);
+}
+
+@media (min-width: 640px) {
+  .scrolly-story-step {
+    padding: 2rem;
+    border-radius: 1.25rem;
+    margin-bottom: 2rem;
+    transform: translateY(12px);
+  }
 }
 
 .scrolly-story-step.active-step {
@@ -269,11 +305,17 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem;
+  padding: 1.25rem;
   opacity: 0;
   transform: scale(0.95) translateY(15px);
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .stage-view {
+    padding: 2.5rem;
+  }
 }
 
 .stage-view.stage-active {
@@ -372,5 +414,60 @@ body {
     top: 0;
     height: 340px;
     margin-bottom: 2rem;
+  }
+}
+
+/* Reviews Marquee Animation */
+.marquee-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-track-left {
+  animation: marquee-scroll-left 48s linear infinite;
+}
+
+.marquee-track-right {
+  animation: marquee-scroll-right 48s linear infinite;
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .marquee-track-left {
+    animation-duration: 38s;
+  }
+  .marquee-track-right {
+    animation-duration: 38s;
   }
 }
